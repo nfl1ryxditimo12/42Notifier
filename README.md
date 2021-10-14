@@ -7,9 +7,10 @@
 
 <br/>
 
-# .
+# 봇 구성
 
 <br/>
 <br/>
 
-![42Alert_FlowChart](https://user-images.githubusercontent.com/74334399/136838320-0b7eee4a-1fdc-452d-b656-21118c5d3f18.png)
+![42Alert_FlowChart](https://user-images.githubusercontent.com/74334399/137345811-90f4612c-53c7-4557-ad7f-8d874c5ef7ba.png)
+
