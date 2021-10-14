@@ -19,10 +19,10 @@ const getTime = require("./time");
 module.exports = (event) => {
     const title = event.name;
     const content = event.description
-        .replace(/\r\n-/g, "\n>    ◉     ")
+        .replace(/- /g, "\n>    👉    ")
         .replace(/\r\n\r\n/g, "\n>    \n> ")
         .replace(/\r\n/g, "\n> ");
-    const location = event.location.length > 0 ? event.location : "X";
+    const location = event.location.length > 0 ? event.location : "❌";
     const max = event.max_people !== null ? event.max_people : "제한 없음";
     const begin = getTime(event.begin_at);
     const end = getTime(event.end_at);
@@ -35,17 +35,17 @@ module.exports = (event) => {
     const textTag = hashTag === null ? "" : hashTag.join(",  ");
 
     return (
-        "💥  *" +
+        "🦋  *" +
         title +
-        "*  💥\n   \n   \n> " +
+        "*  🦋\n   \n   \n> " +
         content +
-        "\n   \n   \n ◉    장소  :  " +
+        "\n   \n   \n ►    장소  :  " +
         location +
-        "\n ◉    총원  :  " +
+        "\n ►    총원  :  " +
         max +
-        "명\n ◉    일시  :  " +
+        "명\n ►    일시  :  " +
         begin +
-        "\n ◉    종료  :  " +
+        "\n ►    종료  :  " +
         end +
         "\n   \n" +
         textTag

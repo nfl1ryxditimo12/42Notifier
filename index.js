@@ -15,6 +15,7 @@ const app = express();
 
 const Event = require("./models/event");
 const web = new WebClient(process.env.SLACK_TOKEN);
+const webTest = new WebClient(process.env.TEST_TOKEN);
 const channelName = "#agenda-alert";
 const access = {
     token: undefined,
@@ -78,7 +79,7 @@ setInterval(async () => {
                     if (newEvent.length > 0) {
                         newEvent.map(async (event) => {
                             getSubscribe(event.id);
-                            web.chat
+                            webTest.chat
                                 .postMessage({
                                     username: "42Alert",
                                     channel: channelName,
