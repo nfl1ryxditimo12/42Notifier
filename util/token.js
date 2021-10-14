@@ -11,7 +11,7 @@ const axios = require("axios");
     그외 - 오류 출력
 */
 
-module.exports = (origin, status = false) => {
+module.exports = (origin) => {
     return new Promise(async (resolve, reject) => {
         try {
             const retValue = {
@@ -22,7 +22,7 @@ module.exports = (origin, status = false) => {
             const leftToken =
                 (retValue.createdAt + retValue.expiresIn) * 1000 - Date.parse(new Date());
 
-            if (retValue.token === undefined || leftToken <= 600000 || status === true) {
+            if (retValue.token === undefined || leftToken <= 600000) {
                 const newToken = await axios({
                     method: "post",
                     url: process.env.FT_TOKEN_URL,
