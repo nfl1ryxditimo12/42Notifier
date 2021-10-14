@@ -36,5 +36,6 @@ module.exports = async (eventId) => {
         await browser.close();
     } catch (err) {
         console.log("\x1b[31m[Crawling] - 크롤링에 실패하였습니다.\x1b[m");
+        console.log(err);
     }
 };
