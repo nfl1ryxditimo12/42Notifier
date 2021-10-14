@@ -49,6 +49,6 @@ module.exports = (event) => {
         end +
         "\n   \n" +
         textTag +
-        "\n   \n"
+        "\nㅤ"
     );
 };
