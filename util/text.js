@@ -48,6 +48,7 @@ module.exports = (event) => {
         "\n ►    종료  :  " +
         end +
         "\n   \n" +
-        textTag
+        textTag +
+        "\n   \n"
     );
 };
