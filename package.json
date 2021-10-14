@@ -1,0 +1,37 @@
+{
+    "name": "42alert",
+    "version": "0.3.0",
+    "description": "📨 새로운 이벤트를 슬랙으로 보내드려요",
+    "engines": {
+        "node": "16.9.1"
+    },
+    "main": "index.js",
+    "scripts": {
+        "start": "node index.js",
+        "test": "node test.js"
+    },
+    "dependencies": {
+        "@slack/web-api": "^6.4.0",
+        "axios": "^0.22.0",
+        "ejs": "^3.1.5",
+        "express": "^4.15.2",
+        "mysql2": "^2.3.0",
+        "node-cron": "^3.0.0",
+        "puppeteer": "^10.4.0",
+        "sequelize": "^6.7.0"
+    },
+    "devDependencies": {
+        "got": "^11.3.0",
+        "tape": "^4.7.0"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/nfl1ryxditimo12/42Alert"
+    },
+    "keywords": [
+        "node",
+        "heroku",
+        "express"
+    ],
+    "license": "MIT"
+}
