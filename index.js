@@ -15,7 +15,7 @@ const app = express();
 
 const Event = require("./models/event");
 const web = new WebClient(process.env.SLACK_TOKEN);
-const webTest = new WebClient(process.env.TEST_TOKEN);
+const webTest = new WebClient(process.env.TEST_TOKEN); // 삭제 예정
 const channelName = "#agenda-alert";
 const access = {
     token: undefined,
