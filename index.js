@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 5000;
 const app = express();
 
 const Event = require("./models/event");
-const web = new WebClient(process.env.SLACK_TOKEN);
+const web = new WebClient(process.env.TEST_TOKEN);
 const channelName = "#agenda-alert";
 const access = {
     token: undefined,
