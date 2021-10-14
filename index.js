@@ -74,7 +74,9 @@ setInterval(async () => {
                     eventApi.sort((a, b) => b.id - a.id);
                     const nowEvent = await Event.findAll({});
                     nowEvent.sort((a, b) => b.dataValues.id - a.dataValues.id);
-                    const newEvent = eventApi.filter((event) => event.id > nowEvent[0].id);
+                    const newEvent = eventApi.filter((event) =>
+                        nowEvent.length > 0 ? event.id > nowEvent[0].id : event
+                    );
 
                     if (newEvent.length > 0) {
                         newEvent.map(async (event) => {
