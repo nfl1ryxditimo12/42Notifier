@@ -19,7 +19,7 @@ const getTime = require("./time");
 module.exports = (event) => {
     const title = event.name;
     const content = event.description
-        .replace(/- /g, "\n>    👉    ")
+        .replace(/- /g, "👉    ")
         .replace(/\r\n\r\n/g, "\n>    \n> ")
         .replace(/\r\n/g, "\n> ");
     const location = event.location.length > 0 ? event.location : "❌";
