@@ -35,7 +35,7 @@ module.exports = (event) => {
     const textTag = hashTag === null ? "" : "\n   \n" + hashTag.join(",  ");
 
     return (
-        "🦋  *" +
+        "ㅤ\n🦋  *" +
         title +
         "*  🦋\n   \n   \n> " +
         content +
