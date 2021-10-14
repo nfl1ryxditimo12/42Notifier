@@ -15,7 +15,7 @@ const app = express();
 
 const Event = require("./models/event");
 const web = new WebClient(process.env.SLACK_TOKEN);
-const channelName = "#agenda-alert";
+const channelName = process.env.SLACK_CHANNEL;
 const access = {
     token: undefined,
     createdAt: undefined,
