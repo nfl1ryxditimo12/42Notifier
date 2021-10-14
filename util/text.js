@@ -32,7 +32,7 @@ module.exports = (event) => {
                   return "# " + value.name;
               })
             : null;
-    const textTag = hashTag === null ? "" : hashTag.join(",  ");
+    const textTag = hashTag === null ? "" : "\n   \n" + hashTag.join(",  ");
 
     return (
         "🦋  *" +
@@ -47,7 +47,6 @@ module.exports = (event) => {
         begin +
         "\n ►    종료  :  " +
         end +
-        "\n   \n" +
         textTag +
         "\nㅤ"
     );
