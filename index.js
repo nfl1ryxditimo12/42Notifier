@@ -103,6 +103,7 @@ setInterval(async () => {
                                             event.max_people !== null ? event.max_people : null,
                                         begin_at: event.begin_at,
                                         end_at: event.end_at,
+                                        created_at: event.created_at,
                                         themes: theme !== null ? theme.join(", ") : null,
                                     }).catch((err) =>
                                         console.log(

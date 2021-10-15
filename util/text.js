@@ -33,8 +33,12 @@ module.exports = (event) => {
               })
             : null;
     const textTag = hashTag === null ? "" : "\n   \n" + hashTag.join(",  ");
+    const createTime = getTime(event.created_at);
 
     return (
+        "`" +
+        createTime +
+        "`\n" +
         "🦋  *" +
         title +
         "*  🦋\n   \n   \n> " +
