@@ -1,4 +1,5 @@
 const puppeteer = require("puppeteer");
+if (process.env.SERVER_ENV === "development") require("dotenv").config();
 
 module.exports = async (eventId) => {
     try {

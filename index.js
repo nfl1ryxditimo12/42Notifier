@@ -3,23 +3,27 @@ const path = require("path");
 const axios = require("axios");
 const http = require("http");
 const cron = require("node-cron");
-const { WebClient } = require("@slack/web-api");
 const { sequelize } = require("./models");
+if (process.env.SERVER_ENV === "development") require("dotenv").config();
 
-const getToken = require("./util/token");
-const getText = require("./util/text");
-const getSubscribe = require("./util/crawling");
+const getToken = require("./modules/getToken");
+const sendAlert = require("./modules/sendAlert");
+const { newEvent, newExam } = require("./modules/getNewData");
 
 const PORT = process.env.PORT || 5000;
 const app = express();
 
-const Event = require("./models/event");
-const web = new WebClient(process.env.SLACK_TOKEN);
-const channelName = process.env.SLACK_CHANNEL;
-const access = {
-    token: undefined,
-    createdAt: undefined,
-    expiresIn: undefined,
+const accessToken = {
+    event: {
+        token: undefined,
+        createdAt: undefined,
+        expiresIn: undefined,
+    },
+    exam: {
+        token: undefined,
+        createdAt: undefined,
+        expiresIn: undefined,
+    },
 };
 
 /*
@@ -27,10 +31,11 @@ const access = {
     헤로쿠 서버가 US 리전이여서 23시 - 14시 까지 돌려준다. (GMT 기준 08시 - 23시)
 */
 
-cron.schedule("*/20 23,0-14 * * *", () => {
-    console.log("node-cron");
-    http.get("http://ftalert.herokuapp.com/");
-});
+if (process.env.SERVER_ENV === "production")
+    cron.schedule("*/20 23,0-14 * * *", () => {
+        console.log("node-cron");
+        http.get("http://ftalert.herokuapp.com/");
+    });
 
 sequelize
     .sync({ force: false })
@@ -56,76 +61,47 @@ app.get("/", (req, res) => res.render("index"));
     실행을 3초 변경 -> 못잡는 이벤트 설정
 */
 
-setInterval(async () => {
-    await getToken(access)
-        .then(async (retValue) => {
-            access.token = retValue.token;
-            access.createdAt = retValue.createdAt;
-            access.expiresIn = retValue.expiresIn;
+setInterval(() => {
+    getToken(accessToken)
+        .then((retToken) => {
+            accessToken.event.token = retToken.event.token;
+            accessToken.event.createdAt = retToken.event.createdAt;
+            accessToken.event.expiresIn = retToken.event.expiresIn;
 
-            await axios({
+            accessToken.exam.token = retToken.exam.token;
+            accessToken.exam.createdAt = retToken.exam.createdAt;
+            accessToken.exam.expiresIn = retToken.exam.expiresIn;
+
+            axios({
                 method: "get",
                 url: "https://api.intra.42.fr/v2/campus/29/events",
-                headers: { Authorization: `Bearer ${access.token}` },
+                headers: { Authorization: `Bearer ${accessToken.event.token}` },
             })
                 .then(async (value) => {
-                    const eventApi = value.data;
-                    eventApi.sort((a, b) => b.id - a.id);
-                    const nowEvent = await Event.findAll({});
-                    nowEvent.sort((a, b) => b.dataValues.id - a.dataValues.id);
-                    const newEvent = eventApi.filter(
-                        (event) => event.id > nowEvent[0].dataValues.id
-                    );
+                    const newEventValue = await newEvent(value.data);
 
-                    if (newEvent.length > 0) {
-                        newEvent.map(async (event) => {
-                            getSubscribe(event.id);
-                            web.chat
-                                .postMessage({
-                                    username: "42Alert",
-                                    channel: channelName,
-                                    text: getText(event),
-                                })
-                                .then((res) => {
-                                    const theme =
-                                        event.themes.length > 0
-                                            ? event.themes.map((value) => {
-                                                  return "# " + value.name;
-                                              })
-                                            : null;
-
-                                    Event.create({
-                                        id: event.id,
-                                        name: event.name,
-                                        description: event.description,
-                                        location: event.location.length > 0 ? event.location : null,
-                                        max_people:
-                                            event.max_people !== null ? event.max_people : null,
-                                        begin_at: event.begin_at,
-                                        end_at: event.end_at,
-                                        created_at: event.created_at,
-                                        themes: theme !== null ? theme.join(", ") : null,
-                                    }).catch((err) =>
-                                        console.log(
-                                            `\x1b[31m[DB] - ${event.id} 데이터베이스 저장 실패\x1b[0m`
-                                        )
-                                    );
-
-                                    console.log(`\x1b[31m[Slack] - ${event.name}\x1b[0m`);
-                                })
-                                .catch((err) => {
-                                    console.log(err);
-                                    console.log(
-                                        `\x1b[31m[Slack] - ${event.id} 이벤트 등록 실패\x1b[0m`
-                                    );
-                                });
-                        });
-                    }
+                    if (newEventValue.length > 0)
+                        newEventValue.map(async (event) => await sendAlert(event, "event"));
                 })
                 .catch((err) => {
                     console.log(err);
                     console.log("\x1b[31m[Event] - 42 API 호출에 실패하였습니다.\x1b[m");
                 });
+
+            axios({
+                method: "get",
+                url: "https://api.intra.42.fr/v2/campus/29/exams",
+                headers: { Authorization: `Bearer ${accessToken.exam.token}` },
+            })
+                .then(async (value) => {
+                    const newExamValue = await newExam(value.data);
+
+                    if (newExamValue.length > 0)
+                        newExamValue.map(async (event) => await sendAlert(event, "exam"));
+                })
+                .catch((err) =>
+                    console.log("\x1b[31m[Event] - 42 API 호출에 실패하였습니다.\x1b[m")
+                );
         })
         .catch((err) => console.log(err));
 }, 3000);
