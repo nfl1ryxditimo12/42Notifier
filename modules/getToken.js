@@ -29,8 +29,8 @@ module.exports = (accessToken) => {
                     url: process.env.FT_TOKEN_URL,
                     params: {
                         grant_type: "client_credentials",
-                        client_id: process.env.FT_API_UID,
-                        client_secret: process.env.FT_API_SECRET,
+                        client_id: process.env.FT_EVENT_UID,
+                        client_secret: process.env.FT_EVENT_SECRET,
                     },
                 });
 
