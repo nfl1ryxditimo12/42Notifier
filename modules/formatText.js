@@ -32,8 +32,8 @@ module.exports = (event, flag) => {
             : null;
     const location = event.location.length > 0 ? event.location : "❌";
     const max = event.max_people !== null ? event.max_people + "명" : "제한 없음";
-    const begin = getTime(event.begin_at);
-    const end = getTime(event.end_at);
+    const begin = "`" + getTime(event.begin_at) + "`";
+    const end = "`" + getTime(event.end_at) + "`";
     const hashTag =
         flag === "event" && event.themes.length > 0
             ? event.themes.map((value) => {
@@ -44,9 +44,7 @@ module.exports = (event, flag) => {
 
     return (
         category +
-        "ㅤㅤ `" +
-        createTime +
-        "`\nㅤ\n" +
+        "\nㅤ\n" +
         `${emoji}  *${title}*  ${emoji}` +
         (flag === "event" ? `\n   \n   \n> ${content}` : "") +
         "\n   \n   \n ►    장소  :  " +
