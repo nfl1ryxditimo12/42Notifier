@@ -53,20 +53,8 @@ module.exports = (accessToken) => {
                 accessToken.exam.token = examToken.data.access_token;
                 accessToken.exam.createdAt = examToken.data.created_at;
                 accessToken.exam.expiresIn = examToken.data.expires_in;
-
-                resolve(accessToken);
-            } else {
-                console.log(
-                    `토큰 소멸까지 \x1b[31m${
-                        leftToken / 1000 / 60 / 60 >= 1
-                            ? `${parseInt(leftToken / 1000 / 60 / 60) % 60}시간 `
-                            : ""
-                    }${parseInt(leftToken / 1000 / 60) % 60}분 ${
-                        parseInt(leftToken / 1000) % 60
-                    }초\x1b[0m 남았습니다.`
-                );
-                resolve(accessToken);
             }
+            resolve(accessToken);
         } catch (err) {
             reject("\x1b[31m[Token] - 42 API 토큰 발행에 실패하였습니다.\x1b[m");
         }
