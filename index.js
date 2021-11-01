@@ -8,23 +8,10 @@ if (process.env.SERVER_ENV === "development") require("dotenv").config();
 
 const getToken = require("./modules/getToken");
 const sendAlert = require("./modules/sendAlert");
-const { newEvent, newExam } = require("./modules/getNewData");
+const newEvent = require("./modules/getNewData");
 
 const PORT = process.env.PORT || 5000;
 const app = express();
-
-const accessToken = {
-    event: {
-        token: undefined,
-        createdAt: undefined,
-        expiresIn: undefined,
-    },
-    exam: {
-        token: undefined,
-        createdAt: undefined,
-        expiresIn: undefined,
-    },
-};
 
 /*
     노드 크론으로 헤로쿠 서버를 잠들지 않게 20분 간격으로 깨워준다.
@@ -62,26 +49,18 @@ app.get("/", (req, res) => res.render("index"));
 */
 
 setInterval(() => {
-    getToken(accessToken)
-        .then((retToken) => {
-            accessToken.event.token = retToken.event.token;
-            accessToken.event.createdAt = retToken.event.createdAt;
-            accessToken.event.expiresIn = retToken.event.expiresIn;
-
-            accessToken.exam.token = retToken.exam.token;
-            accessToken.exam.createdAt = retToken.exam.createdAt;
-            accessToken.exam.expiresIn = retToken.exam.expiresIn;
-
+    getToken()
+        .then((accessToken) => {
             axios({
                 method: "get",
                 url: "https://api.intra.42.fr/v2/campus/29/events",
-                headers: { Authorization: `Bearer ${accessToken.event.token}` },
+                headers: { Authorization: `Bearer ${accessToken.eventToken}` },
             })
                 .then(async (value) => {
-                    const newEventValue = await newEvent(value.data);
+                    const newEventValue = await newEvent(value.data, "event");
 
                     if (newEventValue.length > 0)
-                        newEventValue.map(async (event) => await sendAlert(event, "event"));
+                        newEventValue.map(async (event) => sendAlert(event, "event"));
                 })
                 .catch((err) => {
                     console.log(err);
@@ -91,19 +70,20 @@ setInterval(() => {
             axios({
                 method: "get",
                 url: "https://api.intra.42.fr/v2/campus/29/exams",
-                headers: { Authorization: `Bearer ${accessToken.exam.token}` },
+                headers: { Authorization: `Bearer ${accessToken.examToken}` },
             })
                 .then(async (value) => {
-                    const newExamValue = await newExam(value.data);
+                    const newExamValue = await newEvent(value.data, "exam");
 
                     if (newExamValue.length > 0)
-                        newExamValue.map(async (event) => await sendAlert(event, "exam"));
+                        newExamValue.map(async (event) => sendAlert(event, "exam"));
                 })
-                .catch((err) =>
-                    console.log("\x1b[31m[Event] - 42 API 호출에 실패하였습니다.\x1b[m")
-                );
+                .catch((err) => {
+                    console.log(err);
+                    console.log("\x1b[31m[Event] - 42 API 호출에 실패하였습니다.\x1b[m");
+                });
         })
         .catch((err) => console.log(err));
-}, 3000);
+}, 5000);
 
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
