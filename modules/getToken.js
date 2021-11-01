@@ -44,57 +44,64 @@ const tokenApi = async () => {
 module.exports = () => {
     return new Promise(async (resolve, reject) => {
         try {
-            const token = await Token.findOne({ where: { id: 1 } });
-            const accessToken = token !== null ? token.dataValues : null;
-            const retToken = {
-                eventToken: token !== null ? accessToken.eventToken : undefined,
-                examToken: token !== null ? accessToken.examToken : undefined,
-            };
-            if (accessToken === null) {
-                const value = await tokenApi();
+            await Token.findOne({ where: { id: 1 } })
+                .then(async (token) => {
+                    const accessToken = token !== null ? token.dataValues : null;
+                    const retToken = {
+                        eventToken: token !== null ? accessToken.eventToken : undefined,
+                        examToken: token !== null ? accessToken.examToken : undefined,
+                    };
+                    if (accessToken === null) {
+                        const value = await tokenApi();
 
-                await Token.create({
-                    id: 1,
-                    eventToken: value.event.access_token,
-                    eventCreatedAt: value.event.created_at,
-                    eventExpiresIn: value.event.expires_in,
-                    examToken: value.exam.access_token,
-                    examCreatedAt: value.exam.created_at,
-                    examExpiresIn: value.exam.expires_in,
-                }).catch((err) => {
-                    throw err;
-                });
-
-                retToken.eventToken = value.event.access_token;
-                retToken.examToken = value.event.access_token;
-                console.log("\x1b[31m[Token] - 42API 토큰 발행에 성공하였습니다.\x1b[m");
-            } else {
-                const leftToken =
-                    (accessToken.eventCreatedAt + 7200) * 1000 - Date.parse(new Date());
-
-                if (leftToken <= 600000) {
-                    const value = await tokenApi();
-
-                    await Token.update(
-                        {
+                        await Token.create({
+                            id: 1,
                             eventToken: value.event.access_token,
                             eventCreatedAt: value.event.created_at,
                             eventExpiresIn: value.event.expires_in,
                             examToken: value.exam.access_token,
                             examCreatedAt: value.exam.created_at,
                             examExpiresIn: value.exam.expires_in,
-                        },
-                        { where: { id: 1 } }
-                    ).catch((err) => {
-                        throw err;
-                    });
+                        }).catch((err) => {
+                            throw err;
+                        });
 
-                    retToken.eventToken = value.event.access_token;
-                    retToken.examToken = value.event.access_token;
-                    console.log("\x1b[31m[Token] - 42API 토큰 발행에 성공하였습니다.\x1b[m");
-                }
-            }
-            resolve(retToken);
+                        retToken.eventToken = value.event.access_token;
+                        retToken.examToken = value.event.access_token;
+                        console.log("\x1b[31m[Token] - 42API 토큰 발행에 성공하였습니다.\x1b[m");
+                    } else {
+                        const leftToken =
+                            (accessToken.eventCreatedAt + 7200) * 1000 - Date.parse(new Date());
+
+                        if (leftToken <= 600000) {
+                            const value = await tokenApi();
+
+                            await Token.update(
+                                {
+                                    eventToken: value.event.access_token,
+                                    eventCreatedAt: value.event.created_at,
+                                    eventExpiresIn: value.event.expires_in,
+                                    examToken: value.exam.access_token,
+                                    examCreatedAt: value.exam.created_at,
+                                    examExpiresIn: value.exam.expires_in,
+                                },
+                                { where: { id: 1 } }
+                            ).catch((err) => {
+                                throw err;
+                            });
+
+                            retToken.eventToken = value.event.access_token;
+                            retToken.examToken = value.event.access_token;
+                            console.log(
+                                "\x1b[31m[Token] - 42API 토큰 발행에 성공하였습니다.\x1b[m"
+                            );
+                        }
+                    }
+                    resolve(retToken);
+                })
+                .catch((err) => {
+                    throw err;
+                });
         } catch (err) {
             reject(err + "\n\x1b[31m[Token] - 42 API 토큰 발행에 실패하였습니다.\x1b[m");
         }
