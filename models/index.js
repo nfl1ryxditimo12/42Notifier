@@ -3,9 +3,9 @@ if (process.env.SERVER_ENV === "development") require("dotenv").config();
 
 const Event = require("./event");
 const Exam = require("./exam");
-const Token = require("./token");
 
 const env = process.env.NODE_ENV || process.env.SERVER_ENV;
+console.log(env);
 const config = require("../config/config")[env];
 const db = {};
 
@@ -16,6 +16,5 @@ db.Sequelize = Sequelize;
 
 Event.init(sequelize);
 Exam.init(sequelize);
-Token.init(sequelize);
 
 module.exports = db;

@@ -10,56 +10,73 @@ const Exam = require("../models/exam");
 const getText = require("./formatText");
 const getSubscribe = require("./crawling");
 
-module.exports = (event, flag) => {
-    if (flag === "event") getSubscribe(event.id);
+const sendMessage = (event, eventFlag) => {
     web.chat
         .postMessage({
             username: "42Alert",
             channel: channelName,
-            text: getText(event, flag),
+            text: getText(event, eventFlag),
         })
-        .then((res) => {
-            if (flag === "event") {
-                const theme =
-                    event.themes.length > 0
-                        ? event.themes.map((value) => {
-                              return "# " + value.name;
-                          })
-                        : null;
-
-                Event.create({
-                    id: event.id,
-                    name: event.name,
-                    description: event.description,
-                    location: event.location.length > 0 ? event.location : null,
-                    max_people: event.max_people !== null ? event.max_people : null,
-                    begin_at: event.begin_at,
-                    end_at: event.end_at,
-                    created_at: event.created_at,
-                    themes: theme !== null ? theme.join(", ") : null,
-                }).catch((err) =>
-                    console.log(`\x1b[31m[DB] - ${event.id} 데이터베이스 저장 실패\x1b[0m`)
-                );
-
-                console.log(`\x1b[31m[Slack || Event] - ${event.name}\x1b[0m`);
-            } else {
-                Exam.create({
-                    id: event.id,
-                    name: event.name,
-                    location: event.location.length > 0 ? event.location : null,
-                    max_people: event.max_people !== null ? event.max_people : null,
-                    begin_at: event.begin_at,
-                    end_at: event.end_at,
-                    created_at: event.created_at,
-                }).catch((err) =>
-                    console.log(`\x1b[31m[DB] - ${event.id} 데이터베이스 저장 실패\x1b[0m`)
-                );
-
-                console.log(`\x1b[31m[Slack || Exam] - ${event.name}\x1b[0m`);
-            }
-        })
+        .then(() =>
+            console.log(
+                eventFlag === "event"
+                    ? `\x1b[31m[Slack || Event] - ${event.name}\x1b[0m`
+                    : `\x1b[31m[Slack || Exam] - ${event.name}\x1b[0m`
+            )
+        )
         .catch((err) => {
+            eventFlag === "event" ? Event.delete({ where: { id: event.id } }) : Exam.delete({ where: { id: event.id } });
             console.log(err);
             console.log(`\x1b[31m[Slack] - ${event.id} 이벤트 등록 실패\x1b[0m`);
         });
+};
+
+const sendNewEvent = (event, eventFlag) => {
+    console.log(event);
+    if (eventFlag === "event") {
+        const theme =
+            event.themes.length > 0
+                ? event.themes.map((value) => {
+                      return "# " + value.name;
+                  })
+                : null;
+
+        Event.create({
+            id: event.id,
+            name: event.name,
+            description: event.description,
+            location: event.location.length > 0 ? event.location : null,
+            max_people: event.max_people !== null ? event.max_people : null,
+            begin_at: event.begin_at,
+            end_at: event.end_at,
+            created_at: event.created_at,
+            themes: theme !== null ? theme.join(", ") : null,
+        })
+            .then(() => sendMessage(event, eventFlag))
+            .catch((err) => {
+                console.log(err);
+                console.log(`\x1b[31m[DB] - ${event.id} 데이터베이스 저장 실패\x1b[0m`);
+            });
+    } else {
+        Exam.create({
+            id: event.id,
+            name: event.name,
+            location: event.location.length > 0 ? event.location : null,
+            max_people: event.max_people !== null ? event.max_people : null,
+            begin_at: event.begin_at,
+            end_at: event.end_at,
+            created_at: event.created_at,
+        })
+            .then(() => sendMessage(event, eventFlag))
+            .catch((err) => {
+                console.log(err);
+                console.log(`\x1b[31m[DB] - ${event.id} 데이터베이스 저장 실패\x1b[0m`);
+            });
+    }
+};
+
+module.exports = (event, eventFlag) => {
+    if (eventFlag === "event") getSubscribe(event.id);
+
+    sendNewEvent(event, eventFlag);
 };

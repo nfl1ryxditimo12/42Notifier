@@ -40,7 +40,6 @@ module.exports = (event, flag) => {
                   return "# " + value.name;
               })
             : null;
-    const createTime = getTime(event.created_at);
 
     return (
         category +
