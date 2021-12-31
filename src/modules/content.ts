@@ -1,13 +1,11 @@
-const getTime = require("./getTime");
+import datetime from "@modules/datetime";
+import { eventType } from "eventType";
 
 /* 
     최신 이벤트를 슬랙 마크다운으로 포맷 후 반환
-
     -------------
     제목
-
     내용
-
     장소
     총원
     일시
@@ -16,7 +14,7 @@ const getTime = require("./getTime");
     -------------
 */
 
-module.exports = (event, flag) => {
+const content = (event: eventType, flag: string) => {
     const category =
         flag === "event"
             ? ":alphabet-white-e::alphabet-white-v::alphabet-white-e::alphabet-white-n::alphabet-white-t:"
@@ -32,8 +30,8 @@ module.exports = (event, flag) => {
             : null;
     const location = event.location.length > 0 ? event.location : "❌";
     const max = event.max_people !== null ? event.max_people + "명" : "제한 없음";
-    const begin = "`" + getTime(event.begin_at) + "`";
-    const end = "`" + getTime(event.end_at) + "`";
+    const begin = "`" + datetime(event.begin_at) + "`";
+    const end = "`" + datetime(event.end_at) + "`";
     const hashTag =
         flag === "event" && event.themes.length > 0
             ? event.themes.map((value) => {
@@ -57,3 +55,5 @@ module.exports = (event, flag) => {
         (hashTag === null ? "" : "\n   \n" + hashTag.join(",  "))
     );
 };
+
+export default content;

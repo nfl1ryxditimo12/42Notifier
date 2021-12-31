@@ -1,4 +1,4 @@
-module.exports = (time) => {
+const datetime = (time: Date) => {
     const week = ["월", "화", "수", "목", "금", "토", "일"];
     const utc = new Date(time);
     const year = utc.getFullYear();
@@ -13,3 +13,5 @@ module.exports = (time) => {
 
     return `${year}년 ${month + 1}월 ${day}일(${weekLabel}) ${division} ${hour}시 ${minute}분`;
 };
+
+export default datetime;
