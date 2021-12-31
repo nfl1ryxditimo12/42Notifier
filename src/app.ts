@@ -2,7 +2,7 @@ import express from "express";
 import path from "path";
 import http from "http";
 import cron from "node-cron";
-import { createConnection, getCustomRepository } from "typeorm";
+import { createConnection } from "typeorm";
 
 import env from "@modules/env";
 import apiToken from "@modules/token.api";
@@ -39,51 +39,6 @@ app.use(express.static(path.join(__dirname, "public")));
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 app.get("/", (req, res) => res.render("index"));
-
-// import axios from "axios";
-import { EventRepo } from "@repository/event.repository";
-// import { ExamRepo } from "@repository/exam.repository";
-// import { getCustomRepository } from "typeorm";
-
-// app.get("/test", async (req, res) => {
-//     const token: tokenType = {
-//         eventToken: undefined,
-//         eventCreatedAt: undefined,
-//         examToken: undefined,
-//         examCreatedAt: undefined,
-//     };
-//     await apiToken(token);
-
-//     await axios({
-//         method: "get",
-//         url: "https://api.intra.42.fr/v2/campus/29/events",
-//         headers: { Authorization: `Bearer ${token.eventToken}` },
-//     })
-//         .then(async (value) => {
-//             const eventRepo = getCustomRepository(EventRepo);
-//             await value.data.map(async (event) => await eventRepo.createEvent(event));
-//         })
-//         .catch((err) => {
-//             console.log(err);
-//             console.log("\x1b[31m[Event] - 42 API 호출에 실패하였습니다.\x1b[m");
-//         });
-
-//     await axios({
-//         method: "get",
-//         url: "https://api.intra.42.fr/v2/campus/29/exams",
-//         headers: { Authorization: `Bearer ${token.examToken}` },
-//     })
-//         .then(async (value) => {
-//             const examRepo = getCustomRepository(ExamRepo);
-//             await value.data.map(async (exam) => await examRepo.createExam(exam));
-//         })
-//         .catch((err) => {
-//             console.log(err);
-//             console.log("\x1b[31m[Exam] - 42 API 호출에 실패하였습니다.\x1b[m");
-//         });
-
-//     res.send("끝");
-// });
 
 /*
     42 API 토큰 발급 -> 이벤트 조회 -> 데이터 가공 -> 슬랙 출력
