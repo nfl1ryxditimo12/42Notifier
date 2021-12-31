@@ -29,8 +29,7 @@
         "serve-prod": "cross-env NODE_ENV=production --exec ts-node -r tsconfig-paths/register --files ./src/app.ts",
         "serve-dev": "cross-env NODE_ENV=development nodemon --exec ts-node -r tsconfig-paths/register --files ./src/app.ts",
         "start": "yarn run serve-prod",
-        "dev": "yarn run serve-dev",
-        "test": "node test.ts"
+        "dev": "yarn run serve-dev"
     },
     "_moduleAlias": {
         "@controller/*": "./dist/controller/*",
