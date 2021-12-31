@@ -8,7 +8,6 @@ const Event = require("../models/event");
 const Exam = require("../models/exam");
 
 const getText = require("./formatText");
-const getSubscribe = require("./crawling");
 
 const sendMessage = (event, eventFlag) => {
     web.chat
@@ -31,8 +30,7 @@ const sendMessage = (event, eventFlag) => {
         });
 };
 
-const sendNewEvent = (event, eventFlag) => {
-    console.log(event);
+module.exports = (event, eventFlag) => {
     if (eventFlag === "event") {
         const theme =
             event.themes.length > 0
@@ -73,10 +71,4 @@ const sendNewEvent = (event, eventFlag) => {
                 console.log(`\x1b[31m[DB] - ${event.id} 데이터베이스 저장 실패\x1b[0m`);
             });
     }
-};
-
-module.exports = (event, eventFlag) => {
-    if (eventFlag === "event") getSubscribe(event.id);
-
-    sendNewEvent(event, eventFlag);
 };

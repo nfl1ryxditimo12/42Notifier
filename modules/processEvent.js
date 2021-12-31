@@ -1,12 +1,12 @@
 const axios = require("axios");
 
 const getEvent = require("./getEvent");
-const sendAlert = require("./sendAlert");
+const sendNewEvent = require("./sendAlert");
 
 const checkData = async (value, flag) => {
     const newEventValue = await getEvent(value, flag);
 
-    if (newEventValue.length > 0) newEventValue.map((event) => sendAlert(event, flag));
+    if (newEventValue.length > 0) newEventValue.map((event) => sendNewEvent(event, flag));
 };
 
 module.exports = (token) => {

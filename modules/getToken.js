@@ -66,8 +66,9 @@ module.exports = (token) => {
                 retToken.examCreatedAt = value.exam.created_at;
                 console.log("\x1b[31m[Token] - 42API 새 토큰 발행에 성공하였습니다.\x1b[m");
             } else {
-                if (leftToken <= 600000) {
+                if (leftToken <= 0) {
                     const value = await tokenApi();
+                    console.log(leftToken);
 
                     retToken.eventToken = value.event.access_token;
                     retToken.eventCreatedAt = value.event.created_at;
