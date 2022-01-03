@@ -10,6 +10,13 @@
 
 <br/>
 
+## 📭 기존 채널에서 받아보기
+
+따로 워크스페이스를 만들지 않아도 사용 가능합니다<br/>
+멘토님들이 운영하시는 [42seoul_cuckoo](http://42seoul.io/cuckoo) 가입 후 #agenda-alert 채널 등록!<br/>
+
+<br/>
+
 ## 😎 Quick Start
 
 ### 1. 프로젝트 시작
