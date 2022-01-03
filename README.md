@@ -46,7 +46,8 @@ $ npm install --global yarn
 $ yarn dev
 ```
 
-> 이전에 꼭 Slack Bot OAuth Token을 발급 받고 사용해야 합니다.
+> 이전에 꼭 Slack Bot OAuth Token을 발급 받고 사용해야 합니다.<br/>
+> [쉽고 간단한 Slack Bot 만들기](https://seongsu.me/slack-bot)
 
 <br/>
 
