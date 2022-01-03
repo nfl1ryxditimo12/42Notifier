@@ -1,5 +1,13 @@
 <img width="600" alt="42alert" src="https://user-images.githubusercontent.com/74334399/147906064-dd87f8e4-7577-4a0a-98ae-bd34d242d8a9.png">
 
+<p>
+  <img src="https://img.shields.io/badge/Node.js-339933?style=flat-square&logo=Node.js&logoColor=white"/>&nbsp
+  <img src="https://img.shields.io/badge/yarn-2C8EBB?style=flat-square&logo=Yarn&logoColor=white"/>&nbsp
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=TypeScript&logoColor=white"/>&nbsp
+  <img src="https://img.shields.io/badge/Mysql-4479A1?style=flat-square&logo=Mysql&logoColor=white"/>&nbsp
+  <img src="https://img.shields.io/badge/Heorku-430098?style=flat-square&logo=Heroku&logoColor=white"/>&nbsp
+</p>
+
 <br/>
 
 📨 새로운 Agenda 이벤트를 슬랙으로 보내드려요 <br/>
@@ -69,11 +77,3 @@ $ yarn dev
 ![42Alert_FlowChart](https://user-images.githubusercontent.com/74334399/137498343-f9153426-2ce0-43a8-ac3f-35046ddf51af.png)
 
 <br/>
-
-## 🚀 개발 환경
-
--   Node.js v16.13.1 (LTS)
--   yarn v1.22.17
--   TypeScript v4.5.4
--   Typeorm v0.2.41
--   Heroku CLI v7.59.2
