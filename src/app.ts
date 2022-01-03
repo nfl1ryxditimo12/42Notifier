@@ -5,7 +5,7 @@ import cron from "node-cron";
 import { createConnection } from "typeorm";
 
 import env from "@modules/env";
-import apiToken from "@modules/token.api";
+import tokenApi from "@modules/token.api";
 import controller from "@controller/index";
 import { tokenType } from "tokenType";
 
@@ -48,7 +48,7 @@ app.get("/", (req, res) => res.render("index"));
 */
 
 setInterval(async () => {
-    apiToken(token)
+    await tokenApi(token)
         .then((res) => {
             console.log(res);
             controller(token);

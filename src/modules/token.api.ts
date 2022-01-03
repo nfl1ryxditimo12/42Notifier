@@ -38,7 +38,7 @@ const getToken = async () => {
     };
 };
 
-const apiToken = (token: tokenType) => {
+const tokenApi = (token: tokenType) => {
     return new Promise(async (resolve, reject) => {
         try {
             let leftToken =
@@ -64,4 +64,4 @@ const apiToken = (token: tokenType) => {
     });
 };
 
-export default apiToken;
+export default tokenApi;

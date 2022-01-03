@@ -5,12 +5,22 @@ import { ExamRepo } from "@repository/exam.repository";
 import { eventType } from "eventType";
 import { getCustomRepository } from "typeorm";
 
-const examCursusValid = (event: eventType) => {
+const eventCursusValid = (event: eventType, flag: string) => {
+    if (flag === "event") {
+        return (
+            event["cursus_ids"][0] === 21 &&
+            event["campus_ids"][0] === 29 &&
+            event.name.indexOf("test") === -1 &&
+            event.description.indexOf("test") === -1 &&
+            event.location.indexOf("test") === -1
+        );
+    }
+
     return event.cursus[0].slug === "42cursus" && event.name.indexOf("test") === -1 && event.location.indexOf("test") === -1;
 };
 
 const isNewEvent = (recentEvent: Array<eventType>, nowEvent: Events | Exams, flag: string) => {
-    return recentEvent.filter((event) => (flag !== "event" ? examCursusValid(event) : 1) && event.id > nowEvent.id);
+    return recentEvent.filter((event) => eventCursusValid(event, flag) && event.id > nowEvent.id);
 };
 
 const newEvent = async (data: Array<eventType>, flag: string) => {
