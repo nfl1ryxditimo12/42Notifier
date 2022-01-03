@@ -5,7 +5,7 @@ import { ExamRepo } from "@repository/exam.repository";
 import { eventType } from "eventType";
 import { getCustomRepository } from "typeorm";
 
-const eventCursusValid = (event: eventType, flag: string) => {
+const cursusValid = (event: eventType, flag: string) => {
     if (flag === "event") {
         return (
             event["cursus_ids"][0] === 21 &&
@@ -20,7 +20,7 @@ const eventCursusValid = (event: eventType, flag: string) => {
 };
 
 const isNewEvent = (recentEvent: Array<eventType>, nowEvent: Events | Exams, flag: string) => {
-    return recentEvent.filter((event) => eventCursusValid(event, flag) && event.id > nowEvent.id);
+    return recentEvent.filter((event) => cursusValid(event, flag) && event.id > nowEvent.id);
 };
 
 const newEvent = async (data: Array<eventType>, flag: string) => {
