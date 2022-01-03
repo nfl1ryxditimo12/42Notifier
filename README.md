@@ -1,3 +1,5 @@
+<img width="600" alt="42alert" src="https://user-images.githubusercontent.com/74334399/147906064-dd87f8e4-7577-4a0a-98ae-bd34d242d8a9.png">
+
 <br/>
 
 📨 새로운 Agenda 이벤트를 슬랙으로 보내드려요 <br/>
@@ -54,7 +56,7 @@ $ yarn dev
 
 <br/>
 
-## 개발 환경
+## 🚀 개발 환경
 
 -   Node.js v16.13.1 (LTS)
 -   yarn v1.22.17
