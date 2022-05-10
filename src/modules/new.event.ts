@@ -5,22 +5,26 @@ import { ExamRepo } from "@repository/exam.repository";
 import { eventType } from "eventType";
 import { getCustomRepository } from "typeorm";
 
-const cursusValid = (event: eventType, flag: string) => {
-    if (flag === "event") {
-        return (
-            event["cursus_ids"][0] === 21 &&
-            event["campus_ids"][0] === 29 &&
-            event.name.indexOf("test") === -1 &&
-            event.description.indexOf("test") === -1 &&
-            event.location.indexOf("test") === -1
-        );
-    }
+const eventCursusValid = (event: eventType, flag: string) => {
+    const valid =
+        flag === "event"
+            ? event["cursus_ids"][0] === 21 && event["campus_ids"][0] === 29 && event.description.indexOf("test") === -1
+            : event.cursus[0].slug === "42cursus" && event.name.indexOf("test") === -1 && event.location.indexOf("test") === -1;
 
-    return event.cursus[0].slug === "42cursus" && event.name.indexOf("test") === -1 && event.location.indexOf("test") === -1;
+    return (
+        valid &&
+        event.name.indexOf("test") === -1 &&
+        event.location.indexOf("test") === -1 &&
+        event.name.indexOf("DO NOT") === -1 &&
+        event.name.indexOf("do not") === -1 &&
+        event.name.indexOf("TIG") === -1 &&
+        event.name.indexOf("Never") === -1 &&
+        event.name.indexOf("Don't") === -1
+    );
 };
 
 const isNewEvent = (recentEvent: Array<eventType>, nowEvent: Events | Exams, flag: string) => {
-    return recentEvent.filter((event) => cursusValid(event, flag) && event.id > nowEvent.id);
+    return recentEvent.filter((event) => eventCursusValid(event, flag) && event.id > nowEvent.id);
 };
 
 const newEvent = async (data: Array<eventType>, flag: string) => {

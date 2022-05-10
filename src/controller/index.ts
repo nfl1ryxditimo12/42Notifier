@@ -1,6 +1,7 @@
 import axios from "axios";
 import { getCustomRepository } from "typeorm";
 
+import env from "@modules/env";
 import newEvent from "@modules/new.event";
 import slack from "@modules/slack";
 import { EventRepo } from "@repository/event.repository";
@@ -37,7 +38,7 @@ const checkData = async (value: Array<any>, flag: string) => {
 const controller = (token: tokenType) => {
     axios({
         method: "get",
-        url: "https://api.intra.42.fr/v2/campus/29/events",
+        url: env.ftConfig.apiUrl + "/campus/29/events",
         headers: { Authorization: `Bearer ${token.eventToken}` },
     })
         .then((value) => checkData(value.data, "event"))
@@ -48,7 +49,7 @@ const controller = (token: tokenType) => {
 
     axios({
         method: "get",
-        url: "https://api.intra.42.fr/v2/campus/29/exams",
+        url: env.ftConfig.apiUrl + "/campus/29/exams",
         headers: { Authorization: `Bearer ${token.examToken}` },
     })
         .then((value) => checkData(value.data, "exam"))

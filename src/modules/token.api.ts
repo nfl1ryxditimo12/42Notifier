@@ -38,7 +38,7 @@ const getToken = async () => {
     };
 };
 
-const tokenApi = (token: tokenType) => {
+const apiToken = (token: tokenType) => {
     return new Promise(async (resolve, reject) => {
         try {
             let leftToken =
@@ -56,12 +56,13 @@ const tokenApi = (token: tokenType) => {
                 token.eventCreatedAt = value.event.created_at;
                 token.examToken = value.exam.access_token;
                 token.examCreatedAt = value.exam.created_at;
-                resolve("\x1b[31m[Token] - 42API 새 토큰 발행에 성공하였습니다.\x1b[m");
+                console.log("\x1b[31m[Token] - 42API 새 토큰 발행에 성공하였습니다.\x1b[m");
             }
+            resolve("");
         } catch (err) {
             reject(err + "\n\x1b[31m[Token] - 42 API 토큰 발행에 실패하였습니다.\x1b[m");
         }
     });
 };
 
-export default tokenApi;
+export default apiToken;

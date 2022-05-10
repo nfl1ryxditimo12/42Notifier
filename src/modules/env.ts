@@ -1,10 +1,9 @@
 import path from "path";
-import dotenv from "dotenv";
 
 const { NODE_ENV } = process.env;
 
 if (NODE_ENV === "development") {
-    dotenv.config({ path: path.resolve(__dirname, "../../.env.dev") });
+    require("dotenv").config({ path: path.resolve(__dirname, "../../.env.dev") });
 } else if (NODE_ENV !== "production") {
     throw new Error("process.env.NODE_ENV를 설정하지 않았습니다.");
 }

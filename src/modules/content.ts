@@ -15,10 +15,10 @@ import { eventType } from "eventType";
 */
 
 const content = (event: eventType, flag: string) => {
-    const category =
-        flag === "event"
-            ? ":alphabet-white-e::alphabet-white-v::alphabet-white-e::alphabet-white-n::alphabet-white-t:"
-            : ":alphabet-yellow-e::alphabet-yellow-x::alphabet-yellow-a::alphabet-yellow-m:";
+    // const category =
+    //     flag === "event"
+    //         ? ":alphabet-white-e::alphabet-white-v::alphabet-white-e::alphabet-white-n::alphabet-white-t:"
+    //         : ":alphabet-yellow-e::alphabet-yellow-x::alphabet-yellow-a::alphabet-yellow-m:";
     const emoji = flag === "event" ? "🦋" : "📚";
     const title = event.name;
     const content =
@@ -40,8 +40,8 @@ const content = (event: eventType, flag: string) => {
             : null;
 
     return (
-        category +
-        "\nㅤ\n" +
+        // category +
+        // "\nㅤ\n" +
         `${emoji}  *${title}*  ${emoji}` +
         (flag === "event" ? `\n   \n   \n> ${content}` : "") +
         "\n   \n   \n ►    장소  :  " +
