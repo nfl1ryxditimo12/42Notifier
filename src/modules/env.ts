@@ -4,7 +4,9 @@ const { NODE_ENV } = process.env;
 
 if (NODE_ENV === "development") {
     require("dotenv").config({ path: path.resolve(__dirname, "../../.env.dev") });
-} else if (NODE_ENV !== "production") {
+} else if (NODE_ENV === "production") {
+    require("dotenv").config({ path: path.resolve(__dirname, "../../.env.prod") });
+} else {
     throw new Error("process.env.NODE_ENV를 설정하지 않았습니다.");
 }
 
