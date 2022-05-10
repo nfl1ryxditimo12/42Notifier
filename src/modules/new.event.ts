@@ -24,7 +24,7 @@ const eventCursusValid = (event: eventType, flag: string) => {
 };
 
 const isNewEvent = (recentEvent: Array<eventType>, nowEvent: Events | Exams, flag: string) => {
-    return recentEvent.filter((event) => !nowEvent || (eventCursusValid(event, flag) && event.id > nowEvent.id));
+    return recentEvent.filter((event) => eventCursusValid(event, flag) && event.id > nowEvent.id);
 };
 
 const newEvent = async (data: Array<eventType>, flag: string) => {
