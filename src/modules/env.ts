@@ -3,9 +3,9 @@ import path from "path";
 const { NODE_ENV } = process.env;
 
 if (NODE_ENV === "development") {
-    require("dotenv").config({ path: path.resolve(__dirname, "../../.env.dev") });
+    require("dotenv").config({ path: path.join(process.env.PWD, "/.env.dev") });
 } else if (NODE_ENV === "production") {
-    require("dotenv").config({ path: path.resolve(__dirname, "../../.env.prod") });
+    require("dotenv").config({ path: path.join(process.env.PWD, "/.env.prod") });
 } else {
     throw new Error("process.env.NODE_ENV를 설정하지 않았습니다.");
 }

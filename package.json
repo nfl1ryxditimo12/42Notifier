@@ -34,7 +34,7 @@
     "scripts": {
         "build": "cross-env NODE_OPTIONS=--max-old-space-size=2048 NODE_ENV=production webpack --config webpack.config.js",
         "build-dev": "cross-env NODE_ENV=development webpack --config webpack.config.js",
-        "start": "pm2 start build/app.js",
+        "start": "cross-env NODE_ENV=development pm2 start build/app.js",
         "serve-dev": "cross-env NODE_ENV=development nodemon --exec ts-node -r tsconfig-paths/register --files ./src/app.ts",
         "test": "yarn run serve-dev"
     },

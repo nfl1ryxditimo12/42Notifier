@@ -8,6 +8,7 @@ import env from "@modules/env";
 import apiToken from "@modules/token.api";
 import controller from "@controller/index";
 import { tokenType } from "tokenType";
+import dbLoader from "@modules/orm.config";
 
 const app = express();
 const port = env.port || 5000;
@@ -43,9 +44,11 @@ app.get("/", (req, res) => res.render("index"));
 - 서버가 꺼지거나 재시작 되어도 최신 이벤트 id값은 유지된다.
 */
 
-createConnection()
-    .then(() => {
-        console.log("🚀 DB Connected");
+app.listen(port, async () => {
+    console.log(`======= ENV: ${env.nodeEnv} =======`);
+    console.log(`🚀 App listening on the port ${port}`);
+
+    await dbLoader().then(() => {
         setInterval(async () => {
             await apiToken(token)
                 .then(() => {
@@ -53,10 +56,5 @@ createConnection()
                 })
                 .catch((err) => console.log(err));
         }, 3000);
-    })
-    .catch((err) => console.log(err));
-
-app.listen(port, () => {
-    console.log(`======= ENV: ${env.nodeEnv} =======`);
-    console.log(`🚀 App listening on the port ${port}`);
+    });
 });
