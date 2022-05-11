@@ -23,7 +23,6 @@
         "ejs": "^3.1.6",
         "express": "^4.17.2",
         "mysql2": "^2.3.3",
-        "node-cron": "^3.0.0",
         "nodemon": "^2.0.15",
         "ts-node": "^10.4.0",
         "tsconfig-paths": "^3.12.0",
@@ -34,7 +33,7 @@
     "scripts": {
         "build": "cross-env NODE_OPTIONS=--max-old-space-size=2048 NODE_ENV=production webpack --config webpack.config.js",
         "build-dev": "cross-env NODE_ENV=development webpack --config webpack.config.js",
-        "start": "cross-env NODE_ENV=development pm2 start build/app.js",
+        "start": "cross-env NODE_OPTIONS=--max-old-space-size=2048 NODE_ENV=production pm2 start build/app.js",
         "serve-dev": "cross-env NODE_ENV=development nodemon --exec ts-node -r tsconfig-paths/register --files ./src/app.ts",
         "test": "yarn run serve-dev"
     },

@@ -1,8 +1,5 @@
 import express from "express";
 import path from "path";
-import http from "http";
-import cron from "node-cron";
-import { createConnection } from "typeorm";
 
 import env from "@modules/env";
 import apiToken from "@modules/token.api";
@@ -19,18 +16,6 @@ const token: tokenType = {
     examToken: undefined,
     examCreatedAt: undefined,
 };
-
-/*
-    노드 크론으로 헤로쿠 서버를 잠들지 않게 20분 간격으로 깨워준다.
-    헤로쿠 서버가 US 리전이여서 23시 - 14시 까지 돌려준다. (GMT 기준 08시 - 23시)
-*/
-
-if (env.nodeEnv === "production") {
-    cron.schedule("*/20 23,0-14 * * *", () => {
-        console.log("node-cron");
-        http.get("http://ftalert.herokuapp.com/");
-    });
-}
 
 app.use(express.static(path.join(__dirname, "public")));
 app.set("views", path.join(__dirname, "views"));
