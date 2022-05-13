@@ -5,7 +5,7 @@
   <img src="https://img.shields.io/badge/yarn-2C8EBB?style=flat-square&logo=Yarn&logoColor=white"/>&nbsp
   <img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=TypeScript&logoColor=white"/>&nbsp
   <img src="https://img.shields.io/badge/Mysql-4479A1?style=flat-square&logo=Mysql&logoColor=white"/>&nbsp
-  <img src="https://img.shields.io/badge/Heorku-430098?style=flat-square&logo=Heroku&logoColor=white"/>&nbsp
+  <img src="https://img.shields.io/badge/aws-232F3E?style=flat-square&logo=aws&logoColor=white">&nbsp
 </p>
 
 <br/>
@@ -17,6 +17,14 @@
 <br/>
 
 👉 [42Alert 프로젝트 개발기](https://seongsu.me/42alert-retrospective) 👈
+
+<br/>
+
+### 2022-05-11 수정 내역
+
+- 헤로쿠 보안 문제로 인해 AWS EC2로 서버 이전
+- API 파싱 5초 -> 3초
+- `Event`, `Exam` 이모티콘 삭제
 
 <br/>
 
