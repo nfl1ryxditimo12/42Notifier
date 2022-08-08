@@ -23,6 +23,7 @@ const env = {
     slackConfig: {
         token: process.env.SLACK_TOKEN,
         channel: process.env.SLACK_CHANNEL,
+        errorUri: process.env.SLACK_ERROR_URI,
     },
     dbConfig: {
         username: process.env.DATABASE_USERNAME,

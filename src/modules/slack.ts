@@ -35,9 +35,7 @@ const slack = (event: eventType, flag: string) => {
 };
 
 export const sendError = (error: string, trace: string) => {
-    axios.post("https://hooks.slack.com/services/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", {
-        text: errorContent(error, trace),
-    });
+    axios.post(env.slackConfig.errorUri, { text: errorContent(error, trace) });
 };
 
 export default slack;
