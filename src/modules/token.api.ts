@@ -2,6 +2,7 @@ import axios from "axios";
 import env from "@modules/env";
 
 import { tokenType } from "tokenType";
+import { sendError } from "./slack";
 
 /*
     42 API 토큰 생성
@@ -60,7 +61,11 @@ const apiToken = (token: tokenType) => {
             }
             resolve("");
         } catch (err) {
-            reject(err + "\n\x1b[31m[Token] - 42 API 토큰 발행에 실패하였습니다.\x1b[m");
+            const error = "[Token] - 42 API 토큰 발행에 실패하였습니다.";
+            console.log(err + "\n\x1b[31m" + error + "\x1b[m");
+
+            sendError(error, err);
+            reject(error);
         }
     });
 };

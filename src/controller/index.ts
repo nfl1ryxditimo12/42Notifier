@@ -7,6 +7,7 @@ import slack from "@modules/slack";
 import { EventRepo } from "@repository/event.repository";
 import { ExamRepo } from "@repository/exam.repository";
 import { tokenType } from "tokenType";
+import { sendError } from "@modules/slack";
 
 const checkData = async (value: Array<any>, flag: string) => {
     const newEventValue = await newEvent(value, flag);
@@ -43,8 +44,10 @@ const controller = (token: tokenType) => {
     })
         .then((value) => checkData(value.data, "event"))
         .catch((err) => {
-            console.log(err);
-            console.log("\x1b[31m[Event] - 42 API 호출에 실패하였습니다.\x1b[m");
+            const error = "[Event] - 42 API 호출에 실패하였습니다.";
+            console.log(err + "\n\x1b[31m" + error + "\x1b[m");
+
+            sendError(error, err);
         });
 
     axios({
@@ -54,8 +57,10 @@ const controller = (token: tokenType) => {
     })
         .then((value) => checkData(value.data, "exam"))
         .catch((err) => {
-            console.log(err);
-            console.log("\x1b[31m[Exam] - 42 API 호출에 실패하였습니다.\x1b[m");
+            const error = "[Exam] - 42 API 호출에 실패하였습니다.";
+            console.log(err + "\n\x1b[31m" + error + "\x1b[m");
+
+            sendError(error, err);
         });
 };
 

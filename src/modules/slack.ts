@@ -1,8 +1,9 @@
 import { WebClient } from "@slack/web-api";
 import { getCustomRepository } from "typeorm";
+import axios from "axios";
 
 import env from "@modules/env";
-import content from "@modules/content";
+import { content, errorContent } from "@modules/content";
 import { EventRepo } from "@repository/event.repository";
 import { ExamRepo } from "@repository/exam.repository";
 import { eventType } from "eventType";
@@ -31,6 +32,12 @@ const slack = (event: eventType, flag: string) => {
             console.log(err);
             console.log(`\x1b[31m[Slack] - ${event.id} 이벤트 등록 실패\x1b[0m`);
         });
+};
+
+export const sendError = (error: string, trace: string) => {
+    axios.post("https://hooks.slack.com/services/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", {
+        text: errorContent(error, trace),
+    });
 };
 
 export default slack;

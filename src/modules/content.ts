@@ -14,7 +14,7 @@ import { eventType } from "eventType";
     -------------
 */
 
-const content = (event: eventType, flag: string) => {
+export const content = (event: eventType, flag: string) => {
     // const category =
     //     flag === "event"
     //         ? ":alphabet-white-e::alphabet-white-v::alphabet-white-e::alphabet-white-n::alphabet-white-t:"
@@ -56,4 +56,6 @@ const content = (event: eventType, flag: string) => {
     );
 };
 
-export default content;
+export const errorContent = (error: string, trace: string): string => {
+    return `\`${error}\`\n\n${trace}`;
+};
