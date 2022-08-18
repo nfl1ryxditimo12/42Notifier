@@ -35,7 +35,8 @@ const slack = (event: eventType, flag: string) => {
 };
 
 export const sendError = (error: string, trace: string) => {
-    axios.post(env.slackConfig.errorUri, { text: errorContent(error, trace) });
+    if (error !== "AxiosError: Request failed with status code 429")
+        axios.post(env.slackConfig.errorUri, { text: errorContent(error, trace) });
 };
 
 export default slack;
