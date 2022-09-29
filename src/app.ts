@@ -11,10 +11,10 @@ const app = express();
 const port = env.port || 5000;
 
 const token: tokenType = {
-    eventToken: undefined,
-    eventCreatedAt: undefined,
-    examToken: undefined,
-    examCreatedAt: undefined,
+  eventToken: undefined,
+  eventCreatedAt: undefined,
+  examToken: undefined,
+  examCreatedAt: undefined,
 };
 
 app.use(express.static(path.join(__dirname, "public")));
@@ -30,16 +30,16 @@ app.get("/", (req, res) => res.render("index"));
 */
 
 app.listen(port, async () => {
-    console.log(`======= ENV: ${env.nodeEnv} =======`);
-    console.log(`🚀 App listening on the port ${port}`);
+  console.log(`======= ENV: ${env.nodeEnv} =======`);
+  console.log(`🚀 App listening on the port ${port}`);
 
-    await dbLoader().then(() => {
-        setInterval(async () => {
-            await apiToken(token)
-                .then(() => {
-                    controller(token);
-                })
-                .catch((err) => console.log(err));
-        }, 3000);
-    });
+  // await dbLoader().then(() => {
+  //     setInterval(async () => {
+  //         await apiToken(token)
+  //             .then(() => {
+  //                 controller(token);
+  //             })
+  //             .catch((err) => console.log(err));
+  //     }, 3000);
+  // });
 });

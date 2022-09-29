@@ -13,61 +13,61 @@ import { sendError } from "./slack";
 */
 
 const getToken = async () => {
-    const eventToken = await axios({
-        method: "post",
-        url: env.ftConfig.apiUrl + "/oauth/token",
-        params: {
-            grant_type: "client_credentials",
-            client_id: env.ftConfig.eventId,
-            client_secret: env.ftConfig.eventSecret,
-        },
-    });
+  const eventToken = await axios({
+    method: "post",
+    url: env.ftConfig.apiUrl + "/oauth/token",
+    params: {
+      grant_type: "client_credentials",
+      client_id: env.ftConfig.eventId,
+      client_secret: env.ftConfig.eventSecret,
+    },
+  });
 
-    const examToken = await axios({
-        method: "post",
-        url: env.ftConfig.apiUrl + "/oauth/token",
-        params: {
-            grant_type: "client_credentials",
-            client_id: env.ftConfig.examId,
-            client_secret: env.ftConfig.examSecret,
-        },
-    });
+  const examToken = await axios({
+    method: "post",
+    url: env.ftConfig.apiUrl + "/oauth/token",
+    params: {
+      grant_type: "client_credentials",
+      client_id: env.ftConfig.examId,
+      client_secret: env.ftConfig.examSecret,
+    },
+  });
 
-    return {
-        event: eventToken.data,
-        exam: examToken.data,
-    };
+  return {
+    event: eventToken.data,
+    exam: examToken.data,
+  };
 };
 
 const apiToken = (token: tokenType) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            let leftToken =
-                token.eventCreatedAt !== undefined && token.examCreatedAt !== undefined
-                    ? (token.eventCreatedAt > token.examCreatedAt ? token.examCreatedAt : token.eventCreatedAt + 7200) * 1000 -
-                      Date.parse(String(new Date()))
-                    : undefined;
+  return new Promise(async (resolve, reject) => {
+    try {
+      let leftToken =
+        token.eventCreatedAt !== undefined && token.examCreatedAt !== undefined
+          ? (token.eventCreatedAt > token.examCreatedAt ? token.examCreatedAt : token.eventCreatedAt + 7200) * 1000 -
+            Date.parse(String(new Date()))
+          : undefined;
 
-            if (leftToken <= 0) leftToken = undefined;
+      if (leftToken <= 0) leftToken = undefined;
 
-            if (leftToken === undefined) {
-                const value = await getToken();
+      if (leftToken === undefined) {
+        const value = await getToken();
 
-                token.eventToken = value.event.access_token;
-                token.eventCreatedAt = value.event.created_at;
-                token.examToken = value.exam.access_token;
-                token.examCreatedAt = value.exam.created_at;
-                console.log("\x1b[31m[Token] - 42API 새 토큰 발행에 성공하였습니다.\x1b[m");
-            }
-            resolve("");
-        } catch (err) {
-            const error = "[Token] - 42 API 토큰 발행에 실패하였습니다.";
-            console.log(err + "\n\x1b[31m" + error + "\x1b[m");
+        token.eventToken = value.event.access_token;
+        token.eventCreatedAt = value.event.created_at;
+        token.examToken = value.exam.access_token;
+        token.examCreatedAt = value.exam.created_at;
+        console.log("\x1b[31m[Token] - 42API 새 토큰 발행에 성공하였습니다.\x1b[m");
+      }
+      resolve("");
+    } catch (err) {
+      const error = "[Token] - 42 API 토큰 발행에 실패하였습니다.";
+      console.log(err + "\n\x1b[31m" + error + "\x1b[m");
 
-            sendError(error, err);
-            reject(error);
-        }
-    });
+      sendError(error, err);
+      reject(error);
+    }
+  });
 };
 
 export default apiToken;
