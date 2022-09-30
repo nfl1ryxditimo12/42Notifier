@@ -1,5 +1,6 @@
 import datetime from "@modules/datetime";
 import { eventType } from "eventType";
+import env from "@modules/env";
 
 /* 
     최신 이벤트를 슬랙 마크다운으로 포맷 후 반환
@@ -14,15 +15,11 @@ import { eventType } from "eventType";
     -------------
 */
 
-export const content = (event: eventType, flag: string) => {
-  // const category =
-  //     flag === "event"
-  //         ? ":alphabet-white-e::alphabet-white-v::alphabet-white-e::alphabet-white-n::alphabet-white-t:"
-  //         : ":alphabet-yellow-e::alphabet-yellow-x::alphabet-yellow-a::alphabet-yellow-m:";
-  const emoji = flag === "event" ? "🦋" : "📚";
+export const content = (event: eventType) => {
+  const emoji = env.nodeConfig.type === "event" ? "🦋" : "📚";
   const title = event.name;
   const content =
-    flag === "event"
+    env.nodeConfig.type === "event"
       ? event.description
           .replace(/- /g, "👉    ")
           .replace(/\r\n\r\n/g, "\n>    \n> ")
@@ -33,17 +30,15 @@ export const content = (event: eventType, flag: string) => {
   const begin = "`" + datetime(event.begin_at) + "`";
   const end = "`" + datetime(event.end_at) + "`";
   const hashTag =
-    flag === "event" && event.themes.length > 0
+    env.nodeConfig.type === "event" && event.themes.length > 0
       ? event.themes.map((value) => {
           return "# " + value.name;
         })
       : null;
 
   return (
-    // category +
-    // "\nㅤ\n" +
     `${emoji}  *${title}*  ${emoji}` +
-    (flag === "event" ? `\n   \n   \n> ${content}` : "") +
+    (env.nodeConfig.type === "event" ? `\n   \n   \n> ${content}` : "") +
     "\n   \n   \n ►    장소  :  " +
     location +
     "\n ►    총원  :  " +

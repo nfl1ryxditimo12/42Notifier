@@ -1,14 +1,15 @@
 import { EntityRepository, Repository } from "typeorm";
 import { Events } from "@entities/events";
 import { eventType } from "eventType";
+import IRepository from "./IRepository";
 
 @EntityRepository(Events)
-export class EventRepo extends Repository<Events> {
-  findOneEvent = () => {
+export class EventRepo extends IRepository<Events> {
+  findOne = () => {
     return this.createQueryBuilder("events").select().orderBy("events.id", "DESC").limit(1).getOne();
   };
 
-  createEvent = async (event: eventType) => {
+  createOne = async (event: eventType) => {
     const theme =
       event.themes.length > 0
         ? event.themes.map((value) => {
@@ -33,7 +34,7 @@ export class EventRepo extends Repository<Events> {
       .execute();
   };
 
-  deleteEvent = (id: number) => {
-    this.createQueryBuilder("events").delete().where("events.id = :id", { id: id }).execute();
+  deleteOne = async (id: number) => {
+    await this.createQueryBuilder("events").delete().where("events.id = :id", { id: id }).execute();
   };
 }

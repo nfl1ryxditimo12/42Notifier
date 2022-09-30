@@ -1,14 +1,15 @@
-import { EntityRepository, Repository } from "typeorm";
+import { EntityRepository } from "typeorm";
 import { Exams } from "@entities/exams";
 import { eventType } from "eventType";
+import IRepository from "@repository/IRepository";
 
 @EntityRepository(Exams)
-export class ExamRepo extends Repository<Exams> {
-  findOneExam = () => {
+export class ExamRepo extends IRepository<Exams> {
+  findOne = () => {
     return this.createQueryBuilder("exams").select().orderBy("exams.id", "DESC").limit(1).getOne();
   };
 
-  createExam = async (exam: eventType) => {
+  createOne = async (exam: eventType) => {
     await this.createQueryBuilder("exams")
       .insert()
       .into(Exams)
@@ -24,7 +25,7 @@ export class ExamRepo extends Repository<Exams> {
       .execute();
   };
 
-  deleteExam = (id: number) => {
-    this.createQueryBuilder("exams").delete().where("exams.id = :id", { id: id }).execute();
+  deleteOne = async (id: number) => {
+    await this.createQueryBuilder("exams").delete().where("exams.id = :id", { id: id }).execute();
   };
 }

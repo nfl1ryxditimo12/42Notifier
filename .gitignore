@@ -2,8 +2,13 @@ node_modules/
 
 dist/
 build/
+logs/
 
-.env.dev
 .env.prod
+.env.dev
+.env.test
+.env.event
+.env.exam
 
 ormlogs.log
+yarn-error.log

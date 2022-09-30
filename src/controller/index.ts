@@ -1,67 +1,46 @@
 import axios from "axios";
-import { getCustomRepository } from "typeorm";
+import { getCustomRepository, TypeORMError } from "typeorm";
 
 import env from "@modules/env";
 import newEvent from "@modules/new.event";
-import slack from "@modules/slack";
+import slack, { slackError } from "@modules/slack";
 import { EventRepo } from "@repository/event.repository";
 import { ExamRepo } from "@repository/exam.repository";
-import { tokenType } from "tokenType";
-import { sendError } from "@modules/slack";
+import Http, { HttpRequest } from "@modules/http";
+import Get from "@modules/di";
+import { eventType } from "eventType";
+import IRepository from "@repository/IRepository";
+import { Events } from "@entities/events";
+import { Exams } from "@entities/exams";
+import { Token } from "@modules/token";
 
-const checkData = async (value: Array<any>, flag: string) => {
-  const newEventValue = await newEvent(value, flag);
+const checkData = async (value: Array<any>) => {
+  const newEventValue: eventType[] = await newEvent(value);
 
-  newEventValue.map((event) => {
-    const eventRepo = getCustomRepository(EventRepo);
-    const examRepo = getCustomRepository(ExamRepo);
+  newEventValue.map(async (event) => {
+    const repo: IRepository<Events | Exams> =
+      env.nodeConfig.type === "event" ? getCustomRepository(EventRepo) : getCustomRepository(ExamRepo);
 
-    if (flag === "event") {
-      eventRepo
-        .createEvent(event)
-        .then(() => slack(event, flag))
-        .catch((err) => {
-          console.log(err);
-          console.log(`\x1b[31m[DB] - ${event.id} 데이터베이스 저장 실패\x1b[0m`);
-        });
-    } else {
-      examRepo
-        .createExam(event)
-        .then(() => slack(event, flag))
-        .catch((err) => {
-          console.log(err);
-          console.log(`\x1b[31m[DB] - ${event.id} 데이터베이스 저장 실패\x1b[0m`);
-        });
-    }
+    await repo
+      .createOne(event)
+      .then(() => slack(event))
+      .catch((err: TypeORMError) => {
+        throw err;
+      });
   });
 };
 
-const controller = (token: tokenType) => {
-  axios({
+const controller = async () => {
+  const token: Token = Get.get("Token");
+  const http: Http = Get.get("Http");
+  const requestParam = new HttpRequest({
     method: "get",
-    url: env.ftConfig.apiUrl + "/campus/29/events",
-    headers: { Authorization: `Bearer ${token.eventToken}` },
-  })
-    .then((value) => checkData(value.data, "event"))
-    .catch((err) => {
-      const error = "[Event] - 42 API 호출에 실패하였습니다.";
-      console.log(err + "\n\x1b[31m" + error + "\x1b[m");
+    path: env.ftConfig.path,
+    headers: { Authorization: `Bearer ${token.token}` },
+  });
+  const events = await http.connect(requestParam);
 
-      sendError(error, err);
-    });
-
-  axios({
-    method: "get",
-    url: env.ftConfig.apiUrl + "/campus/29/exams",
-    headers: { Authorization: `Bearer ${token.examToken}` },
-  })
-    .then((value) => checkData(value.data, "exam"))
-    .catch((err) => {
-      const error = "[Exam] - 42 API 호출에 실패하였습니다.";
-      console.log(err + "\n\x1b[31m" + error + "\x1b[m");
-
-      sendError(error, err);
-    });
+  checkData(events);
 };
 
 export default controller;

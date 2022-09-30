@@ -1,26 +1,26 @@
 import path from "path";
 
-const { NODE_ENV } = process.env;
+const { NODE_TYPE } = process.env;
 
-if (NODE_ENV === "development") {
-  require("dotenv").config({ path: path.join(process.env.PWD, "/.env.dev") });
-} else if (NODE_ENV === "production") {
-  require("dotenv").config({ path: path.join(process.env.PWD, "/.env.prod") });
-} else if (NODE_ENV === "test") {
-  require("dotenv").config({ path: path.join(process.env.PWD, "/.env.test") });
+if (NODE_TYPE === "event") {
+  require("dotenv").config({ path: path.join(process.env.PWD, "/.env.event") });
+} else if (NODE_TYPE === "exam") {
+  require("dotenv").config({ path: path.join(process.env.PWD, "/.env.exam") });
 } else {
-  throw new Error("process.env.NODE_ENV를 설정하지 않았습니다.");
+  throw new Error("process.env.NODE_TYPE을 설정하지 않았습니다.");
 }
 
 const env = {
-  port: parseInt(String(process.env.PORT), 10) || 5000,
-  nodeEnv: process.env.NODE_ENV,
+  nodeConfig: {
+    environ: process.env.NODE_ENV,
+    port: parseInt(String(process.env.PORT), 10) || (NODE_TYPE === "event" ? 5000 : 5001),
+    type: process.env.TYPE,
+  },
   ftConfig: {
-    eventId: process.env.FT_EVENT_UID,
-    eventSecret: process.env.FT_EVENT_SECRET,
-    examId: process.env.FT_EXAM_UID,
-    examSecret: process.env.FT_EXAM_SECRET,
-    apiUrl: process.env.FT_API_URL,
+    uid: process.env.FT_API_UID,
+    secret: process.env.FT_API_SECRET,
+    url: process.env.FT_API_URL,
+    path: process.env.FT_API_PATH,
   },
   slackConfig: {
     token: process.env.SLACK_TOKEN,

@@ -34,11 +34,14 @@
     "winston-daily-rotate-file": "^4.7.1"
   },
   "scripts": {
-    "build:prod": "cross-env NODE_OPTIONS=--max-old-space-size=2048 NODE_ENV=production webpack --config webpack.config.js",
-    "build:dev": "cross-env NODE_ENV=development webpack --config webpack.config.js",
-    "build:test": "cross-env NODE_ENV=test webpack --config webpack.config.js",
-    "start:prod": "cross-env NODE_ENV=production pm2 start build/app.js",
-    "start:dev": "cross-env NODE_ENV=development nodemon --exec ts-node -r tsconfig-paths/register --files ./src/app.ts",
+    "build:prod:event": "cross-env NODE_OPTIONS=--max-old-space-size=2048 NODE_ENV=production NODE_TYPE=event webpack --config webpack.config.js",
+    "build:prod:exam": "cross-env NODE_OPTIONS=--max-old-space-size=2048 NODE_ENV=production NODE_TYPE=exam webpack --config webpack.config.js",
+    "build:dev:event": "cross-env NODE_ENV=development NODE_TYPE=event webpack --config webpack.config.js",
+    "build:dev:exam": "cross-env NODE_ENV=development NODE_TYPE=exam webpack --config webpack.config.js",
+    "deploy:event": "cross-env NODE_OPTIONS=--max-old-space-size=2048 NODE_TYPE=event pm2 start build/event/app.js",
+    "deploy:exam": "cross-env NODE_OPTIONS=--max-old-space-size=2048 NODE_TYPE=exam pm2 start build/exam/app.js",
+    "start:event": "cross-env NODE_ENV=development NODE_TYPE=event nodemon --exec ts-node -r tsconfig-paths/register --files ./src/app.ts",
+    "start:exam": "cross-env NODE_ENV=development NODE_ENV=exam nodemon --exec ts-node -r tsconfig-paths/register --files ./src/app.ts",
     "start:test": "cross-env NODE_ENV=test pm2 start build/app.js"
   },
   "_moduleAlias": {
