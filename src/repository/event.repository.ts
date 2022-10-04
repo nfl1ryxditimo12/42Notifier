@@ -1,11 +1,11 @@
-import { EntityRepository, Repository } from "typeorm";
+import { EntityRepository } from "typeorm";
 import { Events } from "@entities/events";
 import { eventType } from "eventType";
 import IRepository from "./IRepository";
 
 @EntityRepository(Events)
 export class EventRepo extends IRepository<Events> {
-  findOne = () => {
+  findOne = (): Promise<Events | undefined> => {
     return this.createQueryBuilder("events").select().orderBy("events.id", "DESC").limit(1).getOne();
   };
 

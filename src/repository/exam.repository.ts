@@ -5,7 +5,7 @@ import IRepository from "@repository/IRepository";
 
 @EntityRepository(Exams)
 export class ExamRepo extends IRepository<Exams> {
-  findOne = () => {
+  findOne = (): Promise<Exams | undefined> => {
     return this.createQueryBuilder("exams").select().orderBy("exams.id", "DESC").limit(1).getOne();
   };
 

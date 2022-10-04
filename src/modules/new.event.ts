@@ -2,11 +2,12 @@ import { Events } from "@entities/events";
 import { Exams } from "@entities/exams";
 import { EventRepo } from "@repository/event.repository";
 import { ExamRepo } from "@repository/exam.repository";
+import IRepository from "@repository/IRepository";
 import { eventType } from "eventType";
 import { getCustomRepository } from "typeorm";
 import env from "./env";
 
-const eventCursusValid = (event: eventType) => {
+const validCursusEvent = (event: eventType) => {
   const valid =
     env.nodeConfig.type === "event"
       ? event["cursus_ids"][0] === 21 && event["campus_ids"][0] === 29 && event.description.indexOf("test") === -1
@@ -24,16 +25,12 @@ const eventCursusValid = (event: eventType) => {
   );
 };
 
-const isNewEvent = (recentEvent: Array<eventType>, nowEvent: Events | Exams) => {
-  return recentEvent.filter((event) => eventCursusValid(event) && event.id > nowEvent.id);
-};
-
-const newEvent = async (data: Array<eventType>) => {
-  const recentEvent = data.sort((a: eventType, b: eventType) => b.id - a.id);
-  const repo = env.nodeConfig.type === "event" ? getCustomRepository(EventRepo) : getCustomRepository(ExamRepo);
+const newEvent = async (data: Array<eventType>): Promise<eventType[]> => {
+  const repo: IRepository<Events | Exams> =
+    env.nodeConfig.type === "event" ? getCustomRepository(EventRepo) : getCustomRepository(ExamRepo);
+  const recentEvent = data.filter((event) => validCursusEvent(event)).sort((a: eventType, b: eventType) => b.id - a.id);
   const nowEvent = await repo.findOne();
-
-  return isNewEvent(recentEvent, nowEvent);
+  return nowEvent ? recentEvent.filter((event) => event.id > nowEvent.id) : [recentEvent[0]];
 };
 
 export default newEvent;
