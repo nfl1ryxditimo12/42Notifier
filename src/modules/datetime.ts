@@ -3,7 +3,7 @@ const gmt = 3600000 * (timezone / 60 + 9);
 
 const datetime = (time: Date) => {
   const week = ["월", "화", "수", "목", "금", "토", "일"];
-  const date = new Date(time.getTime() + gmt);
+  const date = new Date(new Date(time).getTime() + gmt);
   const year = date.getFullYear();
   const month = date.getMonth();
   const day = date.getDate();
