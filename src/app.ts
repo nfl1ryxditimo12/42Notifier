@@ -28,12 +28,14 @@ app.listen(port, async () => {
   console.log(`🚀 App listening on the port ${port}`);
   console.log(env);
 
-  await dbLoader().then(() => {
-    dependencyInject();
-    setInterval(async () => {
-      Promise.resolve(apiToken())
-        .then(() => Promise.resolve(controller()).catch((err) => ErrorFilter(err)))
-        .catch((err) => ErrorFilter(err));
-    }, 3000);
-  });
+  await dbLoader()
+    .then(() => {
+      dependencyInject();
+      setInterval(async () => {
+        Promise.resolve(apiToken())
+          .then(() => Promise.resolve(controller()).catch((err) => ErrorFilter(err)))
+          .catch((err) => ErrorFilter(err));
+      }, 3000);
+    })
+    .catch((err) => console.log(err));
 });

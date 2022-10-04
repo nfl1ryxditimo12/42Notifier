@@ -14,7 +14,7 @@ const defaultOrmConfig: ConnectionOptions = {
   database: database,
   charset: "utf8mb4_general_ci",
   timezone: "+09:00",
-  synchronize: false,
+  synchronize: true,
   logging: ["error"],
   logger: "file",
   maxQueryExecutionTime: 2000,
@@ -22,9 +22,7 @@ const defaultOrmConfig: ConnectionOptions = {
 };
 
 const dbLoader = async (ormConfig: ConnectionOptions = defaultOrmConfig) =>
-  await createConnection(ormConfig)
-    .then(() => console.log("🚀 DB Connected"))
-    .catch((err) => console.log(err));
+  await createConnection(ormConfig).then(() => console.log("🚀 DB Connected"));
 
 export const clearDatabase = () => getConnection().close();
 
