@@ -14,7 +14,7 @@ const defaultOrmConfig: ConnectionOptions = {
   database: database,
   charset: "utf8mb4_general_ci",
   timezone: "+09:00",
-  synchronize: true,
+  synchronize: false,
   logging: ["error"],
   logger: "file",
   maxQueryExecutionTime: 2000,
