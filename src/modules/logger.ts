@@ -4,6 +4,7 @@ import datetime from "@modules/datetime";
 import env from "@modules/env";
 import { TypeORMError } from "typeorm";
 import { AxiosError } from "axios";
+import { slackError } from "@modules/slack";
 
 const { printf } = winston.format;
 
@@ -77,8 +78,11 @@ class Logger {
   }
 
   async latency(status: number, end: number) {
+    const ms = end - this.start;
+
+    if (ms > 2000) await slackError({ statusCode: status, stack: new Error().stack, message: `2초 이상 걸린 이벤트 - ${ms}ms` });
     if (this.start !== 0) {
-      const message: string = `${datetime(new Date(), true)}:${status}:${this.start}:${end}:${end - this.start}`;
+      const message: string = `${datetime(new Date())}:${status}:${this.start}:${end}:${ms}`;
 
       await new Promise(() => {
         if (this.type === "auth") AuthLogger.debug(message);
@@ -89,8 +93,15 @@ class Logger {
   }
 
   async error(error: AxiosError | TypeORMError | any) {
-    const code = error instanceof AxiosError ? error.response.status : error instanceof TypeORMError ? error["code"] : "Unknown";
-    const message = `${datetime(new Date(), true)}:${this.type}:${code}:${error.message}`;
+    const code =
+      error instanceof AxiosError
+        ? error.message !== "timeout of 10000ms exceeded"
+          ? error.response.status
+          : 408
+        : error instanceof TypeORMError
+        ? error["code"]
+        : "Unknown";
+    const message = `${datetime(new Date())}:${this.type}:${code}:${error.message}`;
 
     await new Promise(() => {
       ErrorLogger.error(message);
