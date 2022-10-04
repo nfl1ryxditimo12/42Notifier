@@ -95,7 +95,7 @@ const errorFormat = ({ statusCode, stack, message }: IError) => {
     })
     .addField({
       title: "TIME_STAMP",
-      value: `\`${datetime(new Date(), true)}\``,
+      value: `\`${datetime(new Date())}\``,
     })
     .addField({
       title: "STATUS_CODE",
