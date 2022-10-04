@@ -26,7 +26,6 @@ app.get("/", (req, res) => res.render("index"));
 app.listen(port, async () => {
   console.log(`======= ENV: ${env.nodeConfig.environ} =======`);
   console.log(`🚀 App listening on the port ${port}`);
-  console.log(env);
 
   await dbLoader()
     .then(() => {

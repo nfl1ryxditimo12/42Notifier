@@ -15,12 +15,14 @@ export class HttpRequest {
   method: string;
   headers: Record<string, string | number | boolean>;
   params: Record<string, string | number | boolean>;
+  timeout: number;
 
   constructor(param: HttpRequestParam) {
     this.url = env.ftConfig.url + param.path;
     this.method = param.method ? param.method : "get";
     this.headers = param.headers ? param.headers : {};
     this.params = param.params ? param.params : {};
+    this.timeout = 10000;
   }
 }
 
