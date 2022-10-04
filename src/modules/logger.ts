@@ -80,7 +80,6 @@ class Logger {
   async latency(status: number, end: number) {
     const ms = end - this.start;
 
-    if (ms > 2000) await slackError({ statusCode: status, stack: new Error().stack, message: `2초 이상 걸린 이벤트 - ${ms}ms` });
     if (this.start !== 0) {
       const message: string = `${datetime(new Date())}:${status}:${this.start}:${end}:${ms}`;
 
