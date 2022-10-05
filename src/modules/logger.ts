@@ -92,14 +92,7 @@ class Logger {
   }
 
   async error(error: AxiosError | TypeORMError | any) {
-    const code =
-      error instanceof AxiosError
-        ? error.message !== "timeout of 10000ms exceeded"
-          ? error.response.status
-          : 408
-        : error instanceof TypeORMError
-        ? error["code"]
-        : "Unknown";
+    const code = error instanceof AxiosError ? error.response.status : error instanceof TypeORMError ? error["code"] : "Unknown";
     const message = `${datetime(new Date())}:${this.type}:${code}:${error.message}`;
 
     await new Promise(() => {
