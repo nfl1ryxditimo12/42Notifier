@@ -41,7 +41,7 @@
 ## 📭 기존 채널에서 받아보기
 
 따로 워크스페이스를 만들지 않아도 사용 가능합니다<br/>
-멘토님들이 운영하시는 [42seoul_cuckoo](http://42seoul.io/cuckoo) 가입 후 #agenda-alert 채널 등록!<br/>
+Born2code 워크스페이스의 #42seoul_tools_agenda-notifier 채널 등록!<br/>
 
 <br/>
 
@@ -75,8 +75,8 @@ $ npm install --global yarn
 ### 3. 이제 원하는 슬랙 워크스페이스에서 알림 서비스를 받아 볼 수 있습니다.
 
 ```SHELL
-# yarn start는 production 환경에서 사용합니다.
-$ yarn dev
+# yarn start:prod는 production 환경에서 사용합니다.
+$ yarn start:dev
 ```
 
 > 이전에 꼭 Slack Bot OAuth Token을 발급 받고 사용해야 합니다.<br/>
@@ -84,7 +84,7 @@ $ yarn dev
 
 <br/>
 
-👉 헤로쿠가 아닌 다른 서버에 배포할 땐 `src/modules/env.ts` 파일에 배포용 설정을 따로 해야합니다
+👉 EC2가 아닌 다른 서버에 배포할 땐 `src/modules/env.ts` 파일에 배포용 설정을 따로 해야합니다
 
 <br/>
 
