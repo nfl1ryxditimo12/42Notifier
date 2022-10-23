@@ -2,20 +2,14 @@ import express from "express";
 import path from "path";
 
 import env from "@modules/env";
-import apiToken from "@modules/token.api";
+import apiToken from "@modules/token";
 import controller from "@controller/index";
-import { tokenType } from "tokenType";
 import dbLoader from "@modules/orm.config";
+import { dependencyInject } from "@modules/di";
+import ErrorFilter from "@modules/error.filter";
 
 const app = express();
-const port = env.port || 5000;
-
-const token: tokenType = {
-    eventToken: undefined,
-    eventCreatedAt: undefined,
-    examToken: undefined,
-    examCreatedAt: undefined,
-};
+const port = env.nodeConfig.port;
 
 app.use(express.static(path.join(__dirname, "public")));
 app.set("views", path.join(__dirname, "views"));
@@ -30,16 +24,17 @@ app.get("/", (req, res) => res.render("index"));
 */
 
 app.listen(port, async () => {
-    console.log(`======= ENV: ${env.nodeEnv} =======`);
-    console.log(`🚀 App listening on the port ${port}`);
+  console.log(`======= ENV: ${env.nodeConfig.environ} =======`);
+  console.log(`🚀 App listening on the port ${port}`);
 
-    await dbLoader().then(() => {
-        setInterval(async () => {
-            await apiToken(token)
-                .then(() => {
-                    controller(token);
-                })
-                .catch((err) => console.log(err));
-        }, 3000);
-    });
+  await dbLoader()
+    .then(() => {
+      dependencyInject();
+      setInterval(async () => {
+        Promise.resolve(apiToken())
+          .then(() => Promise.resolve(controller()).catch((err) => ErrorFilter(err)))
+          .catch((err) => ErrorFilter(err));
+      }, 3000);
+    })
+    .catch((err) => console.log(err));
 });
