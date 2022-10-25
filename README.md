@@ -1,11 +1,11 @@
 <img width="600" alt="42alert" src="https://user-images.githubusercontent.com/74334399/147906064-dd87f8e4-7577-4a0a-98ae-bd34d242d8a9.png">
 
 <p>
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=TypeScript&logoColor=white"/>&nbsp
   <img src="https://img.shields.io/badge/Node.js-339933?style=flat-square&logo=Node.js&logoColor=white"/>&nbsp
   <img src="https://img.shields.io/badge/yarn-2C8EBB?style=flat-square&logo=Yarn&logoColor=white"/>&nbsp
-  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=TypeScript&logoColor=white"/>&nbsp
   <img src="https://img.shields.io/badge/Mysql-4479A1?style=flat-square&logo=Mysql&logoColor=white"/>&nbsp
-  <img src="https://img.shields.io/badge/aws-232F3E?style=flat-square&logo=aws&logoColor=white">&nbsp
+  <img src="https://img.shields.io/badge/aws-232F3E?style=flat-square&logo=Amazon AWS&logoColor=white">&nbsp
 </p>
 
 <br/>
@@ -20,21 +20,24 @@
 
 <br/>
 
-### 2022-05-11 수정 내역
+## 📝 수정 사항
 
-- 헤로쿠 보안 문제로 인해 AWS EC2로 서버 이전
-- API 파싱 5초 -> 3초
-- `Event`, `Exam` 이모티콘 삭제
+```SHELL
+# 2022-10-07 수정 내역
 
-<br>
-
-### 2022-10-07 수정 내역
-
-- Event, Exam 이벤트 통합
+- Event, Exam 이벤트 프로세스 분산
 - 에러 도메인 별 로깅 로직 추가
 - 에러 또는 Latency 대응을 위한 모니터링 로직 추가
 - Fatal Error 발생 시 모니터링용 슬랙 채널 알림 로직 추가
 - 서버 Seoul -> Paris 이전
+
+
+# 2022-05-11 수정 내역
+
+- 헤로쿠 보안 문제로 인해 AWS EC2로 서버 이전
+- API 파싱 5초 -> 3초
+- `Event`, `Exam` 이모티콘 삭제
+```
 
 <br/>
 
