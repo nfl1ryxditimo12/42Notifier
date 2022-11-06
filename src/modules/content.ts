@@ -3,6 +3,8 @@ import { eventType } from "eventType";
 import env from "@modules/env";
 
 const parseContent = (description: string): string => {
+  if (!description || !description.length) return undefined;
+
   return description
     .split("\n")
     .map((line: string) => line.trim())
@@ -40,17 +42,17 @@ export const content = (event: eventType) => {
 
   return (
     `${emoji}  *${title}*  ${emoji}` +
-    (env.nodeConfig.type === "event" ? `\n   \n   \n\`\`\`${content}\`\`\`` : "") +
+    (content ? `\n   \n \`\`\`${content}\`\`\`` : "") +
     "\n   \n   " +
-    "\n►  장소  :  " +
+    "\n► 장소  :  " +
     location +
-    "\n►  총원  :  " +
+    "\n► 총원  :  " +
     max +
-    "\n►  일시  :  " +
+    "\n► 일시  :  " +
     begin +
-    "\n►  종료  :  " +
+    "\n► 종료  :  " +
     end +
-    (hashTag === null ? "" : "\n   \n" + hashTag.join(",  "))
+    (hashTag ? "\n   \n" + hashTag.join(",  ") : "")
   );
 };
 

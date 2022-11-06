@@ -18,9 +18,12 @@ const datetime = (time: Date, logging = false) => {
   const hour = tfHour >= 13 ? tfHour - 12 : tfHour;
   const division = tfHour >= 12 ? "오후" : "오전";
 
-  return `${logging ? `${year}년 ` : ""}${month + 1}월 ${day}일(${weekLabel}) ${division} ${hour}시 ${minute}분${
-    logging ? ` ${date.getSeconds()}초 ${getMs(date)}ms` : ""
-  }`;
+  if (logging)
+    return `${year}년 ${month + 1}월 ${day}일(${weekLabel}) ${division} ${hour}시 ${minute}분 ${date.getSeconds()}초 ${getMs(
+      date
+    )}ms`;
+
+  return `${year}/${month + 1}/${day}(${weekLabel}) ${division} ${hour}시 ${minute}분`;
 };
 
 export default datetime;
