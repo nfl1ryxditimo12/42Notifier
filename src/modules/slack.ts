@@ -1,11 +1,8 @@
 import { WebClient } from "@slack/web-api";
-import { getCustomRepository } from "typeorm";
 import axios from "axios";
 
 import env from "@modules/env";
 import { content } from "@modules/content";
-import { EventRepo } from "@repository/event.repository";
-import { ExamRepo } from "@repository/exam.repository";
 import { eventType } from "eventType";
 import datetime from "./datetime";
 import { slackTypes } from "slackTypes";
@@ -13,10 +10,10 @@ import IRepository from "@repository/IRepository";
 import { Events } from "@entities/events";
 import { Exams } from "@entities/exams";
 import Logger from "./logger";
+import Get from "./di";
 
 const slack = (event: eventType) => {
-  const repo: IRepository<Events | Exams> =
-    env.nodeConfig.type === "event" ? getCustomRepository(EventRepo) : getCustomRepository(ExamRepo);
+  const repository: IRepository<Events | Exams> = Get.get("Repository");
   const logger = new Logger("slack");
   const web = new WebClient(env.slackConfig.token);
   const channelName = env.slackConfig.channel;
@@ -31,7 +28,7 @@ const slack = (event: eventType) => {
       logger.latency(200, new Date().getTime());
     })
     .catch(() => {
-      repo.deleteOne(event.id);
+      repository.deleteOne(event.id);
     });
 };
 

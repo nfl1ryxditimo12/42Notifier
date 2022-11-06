@@ -1,10 +1,8 @@
 import { Events } from "@entities/events";
 import { Exams } from "@entities/exams";
-import { EventRepo } from "@repository/event.repository";
-import { ExamRepo } from "@repository/exam.repository";
 import IRepository from "@repository/IRepository";
 import { eventType } from "eventType";
-import { getCustomRepository } from "typeorm";
+import Get from "./di";
 import env from "./env";
 
 const validCursusEvent = (event: eventType) => {
@@ -26,10 +24,10 @@ const validCursusEvent = (event: eventType) => {
 };
 
 const newEvent = async (data: Array<eventType>): Promise<eventType[]> => {
-  const repo: IRepository<Events | Exams> =
-    env.nodeConfig.type === "event" ? getCustomRepository(EventRepo) : getCustomRepository(ExamRepo);
+  const repository: IRepository<Events | Exams> = Get.get("Repository");
   const recentEvent = data.filter((event) => validCursusEvent(event)).sort((a: eventType, b: eventType) => b.id - a.id);
-  const nowEvent = await repo.findOne();
+  const nowEvent = await repository.findOne();
+
   return nowEvent ? recentEvent.filter((event) => event.id > nowEvent.id) : [recentEvent[0]];
 };
 
