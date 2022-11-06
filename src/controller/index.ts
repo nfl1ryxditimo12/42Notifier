@@ -15,12 +15,11 @@ import { Exams } from "@entities/exams";
 import { Token } from "@modules/token";
 
 const checkData = async (value: Array<any>) => {
-  const repo: IRepository<Events | Exams> =
-    env.nodeConfig.type === "event" ? getCustomRepository(EventRepo) : getCustomRepository(ExamRepo);
+  const repository: IRepository<Events | Exams> = Get.get("Repository");
   const newEventValue: eventType[] = await newEvent(value);
 
   newEventValue.map(async (event) => {
-    await repo
+    await repository
       .createOne(event)
       .then(() => slack(event))
       .catch((err: TypeORMError) => {
@@ -39,7 +38,7 @@ const controller = async () => {
   });
   const events = await http.connect(requestParam);
 
-  checkData(events);
+  await checkData(events);
 };
 
 export default controller;

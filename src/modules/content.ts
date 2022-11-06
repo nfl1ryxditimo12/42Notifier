@@ -2,6 +2,16 @@ import datetime from "@modules/datetime";
 import { eventType } from "eventType";
 import env from "@modules/env";
 
+const parseContent = (description: string): string => {
+  if (!description || !description.length) return undefined;
+
+  return description
+    .split("\n")
+    .map((line: string) => line.trim())
+    .join("\n")
+    .replace(/- /g, "  👉 ");
+};
+
 /* 
     최신 이벤트를 슬랙 마크다운으로 포맷 후 반환
     -------------
@@ -18,13 +28,7 @@ import env from "@modules/env";
 export const content = (event: eventType) => {
   const emoji = env.nodeConfig.type === "event" ? "🦋" : "📚";
   const title = event.name;
-  const content =
-    env.nodeConfig.type === "event"
-      ? event.description
-          .replace(/- /g, "👉    ")
-          .replace(/\r\n\r\n/g, "\n>    \n> ")
-          .replace(/\r\n/g, "\n> ")
-      : null;
+  const content = parseContent(event.description);
   const location = event.location.length > 0 ? event.location : "❌";
   const max = event.max_people !== null ? event.max_people + "명" : "제한 없음";
   const begin = "`" + datetime(event.begin_at) + "`";
@@ -38,16 +42,17 @@ export const content = (event: eventType) => {
 
   return (
     `${emoji}  *${title}*  ${emoji}` +
-    (env.nodeConfig.type === "event" ? `\n   \n   \n> ${content}` : "") +
-    "\n   \n   \n ►    장소  :  " +
+    (content ? `\n   \n \`\`\`${content}\`\`\`` : "") +
+    "\n   \n   " +
+    "\n► 장소  :  " +
     location +
-    "\n ►    총원  :  " +
+    "\n► 총원  :  " +
     max +
-    "\n ►    일시  :  " +
+    "\n► 일시  :  " +
     begin +
-    "\n ►    종료  :  " +
+    "\n► 종료  :  " +
     end +
-    (hashTag === null ? "" : "\n   \n" + hashTag.join(",  "))
+    (hashTag ? "\n   \n" + hashTag.join(",  ") : "")
   );
 };
 

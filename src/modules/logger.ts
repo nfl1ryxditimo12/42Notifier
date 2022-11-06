@@ -81,7 +81,7 @@ class Logger {
     const ms = end - this.start;
 
     if (this.start !== 0) {
-      const message: string = `${datetime(new Date())}:${status}:${this.start}:${end}:${ms}`;
+      const message: string = `${datetime(new Date(), true)}:${status}:${this.start}:${end}:${ms}`;
 
       await new Promise(() => {
         if (this.type === "auth") AuthLogger.debug(message);
@@ -93,7 +93,7 @@ class Logger {
 
   async error(error: AxiosError | TypeORMError | any) {
     const code = error instanceof AxiosError ? error.response.status : error instanceof TypeORMError ? error["code"] : "Unknown";
-    const message = `${datetime(new Date())}:${this.type}:${code}:${error.message}`;
+    const message = `${datetime(new Date(), true)}:${this.type}:${code}:${error.message}`;
 
     await new Promise(() => {
       ErrorLogger.error(message);
