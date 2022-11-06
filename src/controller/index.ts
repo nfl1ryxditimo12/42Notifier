@@ -39,7 +39,7 @@ const controller = async () => {
   });
   const events = await http.connect(requestParam);
 
-  checkData(events);
+  await checkData(events);
 };
 
 export default controller;
