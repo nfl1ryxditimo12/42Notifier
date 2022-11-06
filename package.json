@@ -41,7 +41,7 @@
     "deploy:event": "cross-env NODE_OPTIONS=--max-old-space-size=2048 NODE_TYPE=event pm2 start build/event/app.js",
     "deploy:exam": "cross-env NODE_OPTIONS=--max-old-space-size=2048 NODE_TYPE=exam pm2 start build/exam/app.js",
     "start:event": "cross-env NODE_ENV=development NODE_TYPE=event nodemon --exec ts-node -r tsconfig-paths/register --files ./src/app.ts",
-    "start:exam": "cross-env NODE_ENV=development NODE_ENV=exam nodemon --exec ts-node -r tsconfig-paths/register --files ./src/app.ts",
+    "start:exam": "cross-env NODE_ENV=development NODE_TYPE=exam nodemon --exec ts-node -r tsconfig-paths/register --files ./src/app.ts",
     "start:test": "cross-env NODE_ENV=test pm2 start build/app.js"
   },
   "_moduleAlias": {
