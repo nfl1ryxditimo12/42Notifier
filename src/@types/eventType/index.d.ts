@@ -19,6 +19,7 @@ declare module "eventType" {
       created_at: Date;
       name: string;
       slug: string;
+      kind: string;
     }>;
   }
 }
