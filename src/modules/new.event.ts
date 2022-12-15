@@ -24,6 +24,8 @@ const validCursusEvent = (event: eventType) => {
 };
 
 const newEvent = async (data: Array<eventType>): Promise<eventType[]> => {
+  if (!Array.isArray(data)) return [];
+
   const repository: IRepository<Events | Exams> = Get.get("Repository");
   const recentEvent = data.filter((event) => validCursusEvent(event)).sort((a: eventType, b: eventType) => b.id - a.id);
   const nowEvent = await repository.findOne();
