@@ -3,27 +3,6 @@ const webpack = require("webpack");
 
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 const nodeExternals = require("webpack-node-externals");
-const dotenv = require("dotenv");
-const { NODE_TYPE } = process.env;
-
-const config = {
-  event: {
-    env: "./.env.event",
-    outputPath: "build/event",
-  },
-  exam: {
-    env: "./.env.exam",
-    outputPath: "build/exam",
-  },
-};
-
-console.log(config[NODE_TYPE]);
-
-dotenv.config({
-  path: config[NODE_TYPE].env,
-});
-
-const outputPath = config[NODE_TYPE].outputPath;
 
 module.exports = {
   entry: "./src/app.ts",
@@ -34,7 +13,7 @@ module.exports = {
   },
   output: {
     filename: "app.js",
-    path: path.resolve(__dirname, outputPath),
+    path: path.resolve(__dirname, "build"),
   },
   devtool: "source-map",
   resolve: {
