@@ -1,5 +1,4 @@
 import express from "express";
-import path from "path";
 
 import env from "@modules/env";
 import apiToken from "@modules/token";
@@ -10,11 +9,6 @@ import ErrorFilter from "@modules/error.filter";
 
 const app = express();
 const port = env.nodeConfig.port;
-
-app.use(express.static(path.join(__dirname, "public")));
-app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "ejs");
-app.get("/", (req, res) => res.render("index"));
 
 /*
 42 API 토큰 발급 -> 이벤트 조회 -> 데이터 가공 -> 슬랙 출력
